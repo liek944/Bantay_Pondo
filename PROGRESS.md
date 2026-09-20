@@ -11,7 +11,7 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 | 1 | Repo scaffold, Docker Compose, Postgres+PostGIS up, Alembic initialized | **COMPLETED** | `milestone/01-repo-scaffold` | 6 passing |
 | 2 | Schema migrations and spatial indexes | **COMPLETED** | `milestone/02-schema-migrations` | 16 passing |
 | 3 | Ingestion for PSGC boundaries and NOAH hazards only, with row-count assertions | **COMPLETED** | `milestone/03-psgc-noah-ingestion` | 23 passing |
-| 4 | Ingestion for DPWH projects, including the spatial join and review queue | Pending | — | — |
+| 4 | Ingestion for DPWH projects, including the spatial join and review queue | **COMPLETED** | `milestone/04-dpwh-ingestion` | 31 passing |
 | 5 | Scoring job with tests | Pending | — | — |
 | 6 | API endpoints, no tiles yet | Pending | — | — |
 | 7 | Vector tiles | Pending | — | — |
@@ -133,3 +133,45 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 - [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
 - [x] `PROGRESS.md` updated.
 - [x] Committed on branch `milestone/03-psgc-noah-ingestion` with descriptive message.
+
+---
+
+## Milestone 4 Details: Ingestion for DPWH Projects, Spatial Join, and Review Queue
+
+- **Status**: Complete
+- **Branch**: `milestone/04-dpwh-ingestion`
+- **Completed On**: 2026-09-20
+
+### Deliverables:
+1. **Real Schema Discovery & Profiling**:
+   - Profiled `bettergovph/dpwh-transparency-data` (`dpwh_transparency_data.parquet`, 24.3 MB, 248,220 rows).
+   - Confirmed 248,220 unique `contractId`s (100% unique primary identifiers).
+   - Identified 214,747 (86.5%) projects with valid Philippine coordinates and 33,473 (13.5%) projects with missing coordinates.
+   - PostGIS `ST_Contains` point benchmark resolved 10,000 points in 5.1s via PostGIS GIST spatial indexing.
+2. **DPWH Projects Ingestion Stage (`pipeline/stages/ingest_dpwh.py`)**:
+   - Normalized fields: `contract_id`, `title`, `description`, `implementing_office`, `funding_source`, `budget_php`, `contract_cost_php`, `start_date`, `target_completion_date`, `physical_progress_pct`, `latitude`, `longitude`.
+   - Computed SHA256 `source_row_hash` per row for change tracking and auditability.
+   - High-performance set-based PostGIS spatial join using temporary staging table with GIST index.
+   - Routing without silent drops:
+     - Projects matching a containing barangay polygon have `geom` and `psgc_code` populated.
+     - Projects with null or out-of-range coordinates are stored in `projects` with `psgc_code = NULL` and recorded in `project_reviews` (`Missing coordinates (null lat/lon)`).
+     - Projects whose coordinates fall outside all barangay polygons (offshore/marine works) are stored in `projects` with `geom = Point` and `psgc_code = NULL` and recorded in `project_reviews` (`Coordinates outside all barangay boundaries`).
+     - Malformed rows (e.g. empty `contractId`) are quarantined into `rejects` table.
+   - Idempotent upsert via `ON CONFLICT (contract_id) DO UPDATE`.
+   - Conservation accounting invariant: `total_in == geocoded + review_queue + rejects`.
+3. **Pipeline CLI Integration (`pipeline/main.py`)**:
+   - Registered `run_ingest_projects(limit=None)` and CLI subcommands `ingest-projects [--limit N]` and `--limit-projects` in `all`.
+   - Successfully executed on live dataset slice (1,000 projects): 821 geocoded, 179 in review queue, 0 rejects, 1,000 upserted in projects.
+4. **Automated Verification Suite (`tests/test_milestone_04.py`)**:
+   - 8 new automated tests (31 total) verifying normalization, date parsing, row hash generation, invalid row rejection, spatial join to known barangay (Maraiging, PSGC `1600205010`), missing coordinate routing to review queue, offshore coordinate routing to review queue, malformed row quarantine in rejects, idempotency, and batch accounting balance conservation.
+5. **Fixture Dataset Row-Count Assertions**:
+   - Preserved exact baseline boundary and hazard row counts: 17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, and 9 hazard zones.
+
+### Definition of Done Checklist:
+- [x] `ruff check` passes on `/pipeline`, `/api`, `/db`, and `/tests` (0 errors).
+- [x] `mypy --strict` passes on `/pipeline`, `/api`, and `/tests` (0 errors).
+- [x] `pytest` passes (31/31 tests passing in 4.17s).
+- [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
+- [x] `PROGRESS.md` updated.
+- [x] Committed on branch `milestone/04-dpwh-ingestion` with descriptive message.
+

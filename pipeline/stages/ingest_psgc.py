@@ -48,7 +48,7 @@ def record_reject(
             INSERT INTO rejects (source_dataset, raw_row, failure_reason, created_at)
             VALUES (%s, %s, %s, NOW());
             """,
-            (source_dataset, json.dumps(raw_row), failure_reason),
+            (source_dataset, json.dumps(raw_row, default=str), failure_reason),
         )
     conn.commit()
 

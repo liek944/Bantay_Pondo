@@ -8,6 +8,7 @@ from typing import TypedDict
 
 from db.session import get_db_connection
 from pipeline.stages.fetch import fetch_file
+from pipeline.stages.ingest_dpwh import ProjectIngestionResult, ingest_dpwh_projects
 from pipeline.stages.ingest_noah import ingest_noah_hazards
 from pipeline.stages.ingest_psgc import ingest_geojson_boundaries
 
@@ -67,6 +68,11 @@ NOAH_DATASETS: list[HazardDatasetConfig] = [
 ]
 
 
+DPWH_PROJECTS_URL = (
+    "https://huggingface.co/datasets/bettergovph/dpwh-transparency-data/resolve/main/dpwh_transparency_data.parquet"
+)
+
+
 def run_ingest_boundaries(levels: list[str] | None = None) -> dict[str, int]:
     """Fetch and ingest PSGC administrative boundaries with row-count assertions."""
     if not levels:
@@ -117,6 +123,30 @@ def run_ingest_hazards(
     return counts
 
 
+def run_ingest_projects(limit: int | None = None) -> ProjectIngestionResult:
+    """Fetch and ingest DPWH infrastructure projects with PostGIS spatial join and review queue."""
+    logger.info("--- Stage: Fetch & Ingest DPWH Infrastructure Projects ---")
+    res = fetch_file(
+        DPWH_PROJECTS_URL,
+        RAW_DATA_DIR,
+        filename="dpwh_transparency_data.parquet",
+    )
+    with get_db_connection() as conn:
+        stats = ingest_dpwh_projects(
+            conn=conn,
+            filepath=Path(res["path"]),
+            limit=limit,
+        )
+    logger.info(
+        "Stage DPWH projects SUCCESS: %d in, %d geocoded, %d in review queue, %d rejects",
+        stats["total_in"],
+        stats["geocoded"],
+        stats["review_queue"],
+        stats["rejects"],
+    )
+    return stats
+
+
 def main() -> None:
     """CLI runner entrypoint."""
     parser = argparse.ArgumentParser(description="Bantay Pondo Data Pipeline CLI")
@@ -128,7 +158,24 @@ def main() -> None:
     subparsers.add_parser(
         "ingest-hazards", help="Fetch and ingest Project NOAH hazard polygons"
     )
-    subparsers.add_parser("all", help="Execute complete ingestion pipeline")
+    projects_parser = subparsers.add_parser(
+        "ingest-projects",
+        help="Fetch and ingest DPWH infrastructure projects with spatial join",
+    )
+    projects_parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Limit number of project rows to ingest",
+    )
+
+    all_parser = subparsers.add_parser("all", help="Execute complete ingestion pipeline")
+    all_parser.add_argument(
+        "--limit-projects",
+        type=int,
+        default=None,
+        help="Limit number of project rows to ingest during all",
+    )
 
     args = parser.parse_args()
 
@@ -136,9 +183,12 @@ def main() -> None:
         run_ingest_boundaries()
     elif args.command == "ingest-hazards":
         run_ingest_hazards()
+    elif args.command == "ingest-projects":
+        run_ingest_projects(limit=args.limit)
     elif args.command == "all":
         run_ingest_boundaries()
         run_ingest_hazards()
+        run_ingest_projects(limit=args.limit_projects)
     else:
         parser.print_help()
         sys.exit(1)
