@@ -9,7 +9,7 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 | # | Milestone | Status | Branch | Tests |
 |---|---|---|---|---|
 | 1 | Repo scaffold, Docker Compose, Postgres+PostGIS up, Alembic initialized | **COMPLETED** | `milestone/01-repo-scaffold` | 6 passing |
-| 2 | Schema migrations and spatial indexes | Pending | `milestone/02-schema-migrations` | — |
+| 2 | Schema migrations and spatial indexes | **COMPLETED** | `milestone/02-schema-migrations` | 16 passing |
 | 3 | Ingestion for PSGC boundaries and NOAH hazards only, with row-count assertions | Pending | — | — |
 | 4 | Ingestion for DPWH projects, including the spatial join and review queue | Pending | — | — |
 | 5 | Scoring job with tests | Pending | — | — |
@@ -56,3 +56,41 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 - [x] Row-count assertions hold on baseline database.
 - [x] `PROGRESS.md` updated.
 - [x] Committed on branch `milestone/01-repo-scaffold` with descriptive message.
+
+---
+
+## Milestone 2 Details: Schema Migrations and Spatial Indexes
+
+- **Status**: Complete
+- **Branch**: `milestone/02-schema-migrations`
+- **Completed On**: 2026-09-20
+
+### Deliverables:
+1. **SQLAlchemy 2.0 Declarative Models (`db/models.py`)**:
+   - Administrative boundaries with PostGIS MultiPolygon SRID 4326: `regions`, `provinces`, `municipalities`, `barangays`.
+   - Disaster hazard exposure polygons: `hazard_zones` with `hazard_type_enum` (`flood`, `landslide`, `storm_surge`).
+   - Core domain models: `projects` (with Point geometry SRID 4326), `contractors` (with string array aliases and trigram index), `procurement_awards`, `officials`.
+   - Scoring & metrics model: `locality_metrics` with composite primary key `(psgc_code, year)`.
+   - Ingestion and data versioning models: `project_reviews` (review queue), `rejects` (quarantine table), `data_versions` (cache & refresh tracking).
+2. **Alembic Migration (`db/migrations/versions/0001_initial_schema.py`)**:
+   - Registered extensions: `postgis`, `pg_trgm`, `btree_gist`.
+   - Safe, idempotent schema setup and rollback (`upgrade()` / `downgrade()`).
+   - Bound metadata to `db/migrations/env.py` (`target_metadata = Base.metadata`).
+   - Database verified and stamped at revision `0001_initial_schema (head)`.
+3. **Spatial and Performance Indexes**:
+   - GIST spatial indexes on every geometry column: `regions.geom`, `provinces.geom`, `municipalities.geom`, `barangays.geom`, `hazard_zones.geom`, `projects.geom`.
+   - BRIN index on `projects.ingested_at`.
+   - Composite B-Tree index on `locality_metrics(psgc_code, year)`.
+   - GIN trigram index on `contractors.normalized_name` (`gin_trgm_ops`).
+4. **Automated Verification Suite (`tests/test_milestone_02.py`)**:
+   - 10 new automated tests (16 total) validating Alembic head revision, table existence, geometry types and SRID 4326, GIST/BRIN/B-tree/GIN trigram indexes, foreign key constraints, live spatial queries, and fixture row-count preservation.
+5. **Fixture Dataset Verification**:
+   - Preserved exact fixture row counts: 17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, and 9 hazard zones.
+
+### Definition of Done Checklist:
+- [x] `ruff check` passes on `/pipeline`, `/api`, `/db`, and `/tests` (0 errors).
+- [x] `mypy --strict` passes on `/pipeline`, `/api`, `/db`, and `/tests` (0 errors).
+- [x] `pytest` passes (16/16 tests passing in 1.90s).
+- [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
+- [x] `PROGRESS.md` updated.
+- [x] Committed on branch `milestone/02-schema-migrations` with descriptive message.

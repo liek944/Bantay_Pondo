@@ -6,6 +6,7 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 from api.config import get_settings
+from db.models import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -22,7 +23,7 @@ config.set_main_option("sqlalchemy.url", settings.database_url)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-target_metadata = None
+target_metadata = Base.metadata
 
 # Tables to ignore during schema reflection / autogenerate (PostGIS internals)
 EXCLUDED_TABLES = {
