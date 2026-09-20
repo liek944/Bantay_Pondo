@@ -12,7 +12,7 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 | 2 | Schema migrations and spatial indexes | **COMPLETED** | `milestone/02-schema-migrations` | 16 passing |
 | 3 | Ingestion for PSGC boundaries and NOAH hazards only, with row-count assertions | **COMPLETED** | `milestone/03-psgc-noah-ingestion` | 23 passing |
 | 4 | Ingestion for DPWH projects, including the spatial join and review queue | **COMPLETED** | `milestone/04-dpwh-ingestion` | 31 passing |
-| 5 | Scoring job with tests | Pending | — | — |
+| 5 | Scoring job with tests | **COMPLETED** | `milestone/05-scoring-job` | 41 passing |
 | 6 | API endpoints, no tiles yet | Pending | — | — |
 | 7 | Vector tiles | Pending | — | — |
 | 8 | Contractor dedupe, procurement join, flags | Pending | — | — |
@@ -174,4 +174,64 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 - [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
 - [x] `PROGRESS.md` updated.
 - [x] Committed on branch `milestone/04-dpwh-ingestion` with descriptive message.
+
+---
+
+## Milestone 5 Details: Scoring Job with Tests
+
+- **Status**: Complete
+- **Branch**: `milestone/05-scoring-job`
+- **Completed On**: 2026-09-20
+
+### Deliverables:
+1. **Mathematical Scoring Engine (`pipeline/stages/score.py`)**:
+   - Implemented exact SPEC mismatch scoring formula:
+     - Hazard exposure percentage: severity-weighted exposed area / total locality area.
+     - Severity level weights: level 1 = 0.3, level 2 = 0.6, level 3 = 1.0.
+     - `expected_share`: locality's severity-weighted exposed area / national total exposed area.
+     - `actual_share`: locality's infrastructure spend / national total spend.
+     - `raw_ratio = actual_share / expected_share`.
+     - `mismatch_score = clamp(50 + 50 * tanh(ln(ratio)), 0..100)`.
+   - Handled all boundary conditions safely:
+     - Balanced spend & risk ($r = 1.0 \implies \text{score} = 50.0$).
+     - Underserved ($r < 1.0 \implies \text{score} < 50.0$, zero spend $\implies \text{score} = 0.0$).
+     - Overserved ($r > 1.0 \implies \text{score} > 50.0$, zero risk $\implies \text{score} = 100.0$).
+     - Finite ratio sentinel (`Decimal("999999.0000")`) to ensure valid JSON serialization across Pydantic models and APIs.
+     - No labeling of localities as fraudulent or corrupt — score measures disproportion, not wrongdoing.
+2. **PostGIS High-Performance Spatial Exposure Engine**:
+   - Pre-filtered candidate localities using spatial bounding box envelopes (`&&`).
+   - Polygon subdivision (`ST_Subdivide(geom, 256)`) with GIST indexing on temporary tables to compute exact spherical polygon intersection areas (`ST_Area(ST_Intersection(...)::geography, false) / 1e6`).
+   - Grouped exposures across hazard types (`flood`, `landslide`, `storm_surge`) and rolled up from barangays to municipalities.
+3. **Locality Metrics Materialization**:
+   - Aggregated DPWH project spend per year and locality (`EXTRACT(YEAR FROM start_date)`).
+   - Computed `hazard_exposure_pct`, `flood_pct`, `landslide_pct`, `surge_pct`.
+   - Computed `population_at_risk`, `spend_per_capita`, and `spend_per_exposed_sqkm`.
+   - Computed `national_percentile` via SQL window function `PERCENT_RANK() OVER (PARTITION BY year ORDER BY mismatch_score ASC) * 100`.
+   - Idempotent upsert via `ON CONFLICT (psgc_code, year) DO UPDATE`.
+4. **Pipeline CLI Runner Integration (`pipeline/main.py`)**:
+   - Subcommand `score [--year YYYY] [--level municipalities|barangays|all]`.
+   - Integrated into `pipeline/main.py all`.
+   - Executed on live dataset slice: 1,894 metrics upserted across 1,894 localities for year 2021.
+5. **Automated Verification Suite (`tests/test_milestone_05.py`)**:
+   - 10 new automated tests (41 total across repo):
+     - Severity weights verification ($0.3, 0.6, 1.0$).
+     - Pure math unit tests for balanced allocation ($\text{score} = 50.0$).
+     - Pure math tests against hand-computed identities ($\text{ratio } 2.0 \implies 80.0, 0.5 \implies 20.0, 3.0 \implies 90.0, 1/3 \implies 10.0$).
+     - Orders of magnitude verification ($\text{ratio } 10.0 \implies 99.0099, 0.1 \implies 0.9901$).
+     - Boundary condition handling (zero spend, zero risk, both zero).
+     - Exposure percentage clamping ($0 \le \text{pct} \le 100$).
+     - Spatial hazard exposure caching asserting non-zero exposure in Batanes and Cagayan.
+     - End-to-end scoring job execution and column validity in `locality_metrics`.
+     - Idempotency test asserting zero duplicate rows on re-runs.
+     - Baseline fixture row-count preservation.
+6. **Fixture Dataset Row-Count Assertions**:
+   - Preserved exact baseline boundary and hazard row counts: 17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, and 9 hazard zones.
+
+### Definition of Done Checklist:
+- [x] `ruff check` passes on `/pipeline`, `/api`, `/db`, and `/tests` (0 errors).
+- [x] `mypy --strict` passes on `/pipeline` and `/api` (0 errors).
+- [x] `pytest` passes (41/41 tests passing).
+- [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
+- [x] `PROGRESS.md` updated.
+- [x] Committed on branch `milestone/05-scoring-job` with descriptive message.
 

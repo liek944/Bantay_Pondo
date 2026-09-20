@@ -11,6 +11,7 @@ from pipeline.stages.fetch import fetch_file
 from pipeline.stages.ingest_dpwh import ProjectIngestionResult, ingest_dpwh_projects
 from pipeline.stages.ingest_noah import ingest_noah_hazards
 from pipeline.stages.ingest_psgc import ingest_geojson_boundaries
+from pipeline.stages.score import ScoringJobResult, compute_and_store_locality_metrics
 
 logging.basicConfig(
     level=logging.INFO,
@@ -68,9 +69,7 @@ NOAH_DATASETS: list[HazardDatasetConfig] = [
 ]
 
 
-DPWH_PROJECTS_URL = (
-    "https://huggingface.co/datasets/bettergovph/dpwh-transparency-data/resolve/main/dpwh_transparency_data.parquet"
-)
+DPWH_PROJECTS_URL = "https://huggingface.co/datasets/bettergovph/dpwh-transparency-data/resolve/main/dpwh_transparency_data.parquet"
 
 
 def run_ingest_boundaries(levels: list[str] | None = None) -> dict[str, int]:
@@ -147,6 +146,26 @@ def run_ingest_projects(limit: int | None = None) -> ProjectIngestionResult:
     return stats
 
 
+def run_score_job(
+    year: int | None = None,
+    levels: list[str] | None = None,
+) -> ScoringJobResult:
+    """Execute scoring job to compute mismatch scores and locality metrics."""
+    logger.info("--- Stage: Compute Mismatch Scores & Locality Metrics ---")
+    years = [year] if year is not None else None
+    with get_db_connection() as conn:
+        result = compute_and_store_locality_metrics(conn, years=years, levels=levels)
+    logger.info(
+        "Stage score SUCCESS: %d metrics upserted across %d localities "
+        "(Total Spend: PHP %s, Exposed: %s sq km)",
+        result["rows_inserted"],
+        result["total_localities_scored"],
+        result["total_spend_php"],
+        result["total_weighted_exposed_sqkm"],
+    )
+    return result
+
+
 def main() -> None:
     """CLI runner entrypoint."""
     parser = argparse.ArgumentParser(description="Bantay Pondo Data Pipeline CLI")
@@ -155,9 +174,7 @@ def main() -> None:
     subparsers.add_parser(
         "ingest-boundaries", help="Fetch and ingest PSGC administrative boundaries"
     )
-    subparsers.add_parser(
-        "ingest-hazards", help="Fetch and ingest Project NOAH hazard polygons"
-    )
+    subparsers.add_parser("ingest-hazards", help="Fetch and ingest Project NOAH hazard polygons")
     projects_parser = subparsers.add_parser(
         "ingest-projects",
         help="Fetch and ingest DPWH infrastructure projects with spatial join",
@@ -169,7 +186,25 @@ def main() -> None:
         help="Limit number of project rows to ingest",
     )
 
-    all_parser = subparsers.add_parser("all", help="Execute complete ingestion pipeline")
+    score_parser = subparsers.add_parser(
+        "score", help="Compute mismatch scores and locality metrics"
+    )
+    score_parser.add_argument(
+        "--year",
+        type=int,
+        default=None,
+        help="Specific project year to score (default: all active years)",
+    )
+    score_parser.add_argument(
+        "--level",
+        choices=["municipalities", "barangays", "all"],
+        default="all",
+        help="Locality level to score (default: all)",
+    )
+
+    all_parser = subparsers.add_parser(
+        "all", help="Execute complete ingestion and scoring pipeline"
+    )
     all_parser.add_argument(
         "--limit-projects",
         type=int,
@@ -185,10 +220,14 @@ def main() -> None:
         run_ingest_hazards()
     elif args.command == "ingest-projects":
         run_ingest_projects(limit=args.limit)
+    elif args.command == "score":
+        lvl = None if args.level == "all" else [args.level]
+        run_score_job(year=args.year, levels=lvl)
     elif args.command == "all":
         run_ingest_boundaries()
         run_ingest_hazards()
         run_ingest_projects(limit=args.limit_projects)
+        run_score_job()
     else:
         parser.print_help()
         sys.exit(1)
