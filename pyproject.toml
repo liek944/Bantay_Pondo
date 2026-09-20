@@ -65,6 +65,10 @@ warn_unused_ignores = true
 warn_return_any = true
 no_implicit_reexport = true
 
+[[tool.mypy.overrides]]
+module = ["shapely.*", "geopandas.*"]
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 minversion = "8.0"
 testpaths = ["tests"]

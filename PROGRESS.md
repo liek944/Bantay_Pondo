@@ -10,7 +10,7 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 |---|---|---|---|---|
 | 1 | Repo scaffold, Docker Compose, Postgres+PostGIS up, Alembic initialized | **COMPLETED** | `milestone/01-repo-scaffold` | 6 passing |
 | 2 | Schema migrations and spatial indexes | **COMPLETED** | `milestone/02-schema-migrations` | 16 passing |
-| 3 | Ingestion for PSGC boundaries and NOAH hazards only, with row-count assertions | Pending | — | — |
+| 3 | Ingestion for PSGC boundaries and NOAH hazards only, with row-count assertions | **COMPLETED** | `milestone/03-psgc-noah-ingestion` | 23 passing |
 | 4 | Ingestion for DPWH projects, including the spatial join and review queue | Pending | — | — |
 | 5 | Scoring job with tests | Pending | — | — |
 | 6 | API endpoints, no tiles yet | Pending | — | — |
@@ -94,3 +94,42 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 - [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
 - [x] `PROGRESS.md` updated.
 - [x] Committed on branch `milestone/02-schema-migrations` with descriptive message.
+
+---
+
+## Milestone 3 Details: Ingestion for PSGC Boundaries and NOAH Hazards Only
+
+- **Status**: Complete
+- **Branch**: `milestone/03-psgc-noah-ingestion`
+- **Completed On**: 2026-09-20
+
+### Deliverables:
+1. **Pipeline Fetch Stage (`pipeline/stages/fetch.py`)**:
+   - Implemented `compute_sha256` and `fetch_file` with content-addressed caching, atomic writing (`.part`), and manifest tracking (`data/raw/manifest.json`).
+   - Network download skipping when local file SHA256 matches manifest.
+2. **PSGC Boundaries Ingestion Stage (`pipeline/stages/ingest_psgc.py`)**:
+   - Real schema discovery for 4 boundary tiers (`regions`, `provinces`, `municipalities`, `barangays`).
+   - Geometry normalization to 2D PostGIS `MultiPolygon(4326)` via Shapely and WKB.
+   - Spheroidal land area parsing and parent PSGC hierarchy resolution.
+   - Idempotent upsert via `ON CONFLICT (psgc_code) DO UPDATE`.
+   - Rejects quarantine table logging (`rejects`) on malformed/invalid geometries without silent drops.
+3. **Project NOAH Hazards Ingestion Stage (`pipeline/stages/ingest_noah.py`)**:
+   - Direct `.zip` shapefile extraction and parsing with GeoPandas.
+   - PostGIS `MultiPolygon(4326)` normalization and CRS reprojection if needed.
+   - Classification across `hazard_type_enum` (`flood`, `landslide`, `storm_surge`) and severity levels 1, 2, 3.
+   - Idempotent ingestion per dataset source and hazard type.
+4. **Pipeline CLI Entrypoint (`pipeline/main.py`)**:
+   - CLI subcommands `ingest-boundaries`, `ingest-hazards`, and `all`.
+   - Strictly typed with `TypedDict` and type annotations passing `mypy --strict`.
+5. **Automated Verification Suite (`tests/test_milestone_03.py`)**:
+   - 7 new automated tests (23 total) verifying fetch SHA256 manifest caching, geometry normalization, boundary row-count assertions (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays), Tuguegarao City presence and geometry validity, NOAH hazard zone counts and types, quarantine rejects logging, and idempotency.
+6. **Fixture Dataset Row-Count Assertions**:
+   - Preserved exact fixture row counts: 17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, and 9 hazard zones.
+
+### Definition of Done Checklist:
+- [x] `ruff check` passes on `/pipeline`, `/api`, and `/tests` (0 errors).
+- [x] `mypy --strict` passes on `/pipeline` and `/api` (0 errors).
+- [x] `pytest` passes (23/23 tests passing in 4.57s).
+- [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
+- [x] `PROGRESS.md` updated.
+- [x] Committed on branch `milestone/03-psgc-noah-ingestion` with descriptive message.
