@@ -34,6 +34,17 @@ PSGC_URLS: dict[str, str] = {
     "barangays": "https://github.com/bendlikeabamboo/barangay-boundaries-repository/releases/download/v2026.4.13.0/barangays.geojson",
 }
 
+CITY_URLS: list[tuple[str, str]] = [
+    (
+        "https://github.com/bendlikeabamboo/barangay-boundaries-repository/releases/download/v2026.4.13.0/component_cities.geojson",
+        "component_cities.geojson",
+    ),
+    (
+        "https://github.com/bendlikeabamboo/barangay-boundaries-repository/releases/download/v2026.4.13.0/highly_urbanized_cities.geojson",
+        "highly_urbanized_cities.geojson",
+    ),
+]
+
 
 class HazardDatasetConfig(TypedDict):
     """Configuration specification for a Project NOAH hazard source dataset."""
@@ -90,6 +101,12 @@ def run_ingest_boundaries(levels: list[str] | None = None) -> dict[str, int]:
                 logger.info("--- Stage: Fetch & Ingest %s ---", lvl)
                 res = fetch_file(PSGC_URLS[lvl], RAW_DATA_DIR, filename=f"{lvl}.geojson")
                 count = ingest_geojson_boundaries(conn, Path(res["path"]), lvl)
+                if lvl == "municipalities":
+                    for city_url, city_filename in CITY_URLS:
+                        city_res = fetch_file(city_url, RAW_DATA_DIR, filename=city_filename)
+                        count = ingest_geojson_boundaries(
+                            conn, Path(city_res["path"]), "municipalities"
+                        )
                 counts[lvl] = count
                 logger.info("Stage %s SUCCESS with %d rows asserted.", lvl, count)
     return counts
