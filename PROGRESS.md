@@ -14,7 +14,7 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 | 4 | Ingestion for DPWH projects, including the spatial join and review queue | **COMPLETED** | `milestone/04-dpwh-ingestion` | 31 passing |
 | 5 | Scoring job with tests | **COMPLETED** | `milestone/05-scoring-job` | 41 passing |
 | 6 | API endpoints, no tiles yet | **COMPLETED** | `milestone/06-api-endpoints` | 58 passing |
-| 7 | Vector tiles | Pending | — | — |
+| 7 | Vector tiles | **COMPLETED** | `milestone/07-vector-tiles` | 69 passing |
 | 8 | Contractor dedupe, procurement join, flags | Pending | — | — |
 | 9 | CI, deployment compose, nginx, observability | Pending | — | — |
 
@@ -299,5 +299,73 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 - [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
 - [x] `PROGRESS.md` updated.
 - [x] Committed on branch `milestone/06-api-endpoints` with descriptive message.
+
+---
+
+## Milestone 7 Details: Vector Tiles
+
+- **Status**: Complete
+- **Branch**: `milestone/07-vector-tiles`
+- **Completed On**: 2026-09-21
+
+### Deliverables:
+1. **Redis Binary Caching Layer (`api/cache.py`)**:
+   - Implemented `get_redis_binary_client()` with `decode_responses=False` to handle arbitrary raw Mapbox Vector Tile (MVT) protobuf binary streams without string decoding corruption.
+   - Added `get_cached_bytes(key: str)` and `set_cached_bytes(key: str, value: bytes, ttl: int | None = None)`.
+   - Updated connection pool lifecycle to safely close both text and binary Redis clients.
+2. **PostGIS Vector Tile Generation Engine (`api/services/tiles.py`)**:
+   - High-performance MVT tile generation using native PostGIS spatial functions:
+     - Tile coordinate bounds validation ($0 \le z \le 22$, $0 \le x < 2^z$, $0 \le y < 2^z$).
+     - `ST_TileEnvelope(z, x, y)` (EPSG:3857) and `ST_Transform(envelope, 4326)` for bounding box pre-filtering with `geom && envelope_4326` using GIST spatial indexes.
+     - `ST_AsMVTGeom(...)` and `ST_AsMVT(...)` for protocol buffer tile serialization.
+   - **`boundaries` Layer**:
+     - Automated Level-of-Detail (LOD) selection based on zoom:
+       - $z \le 6$: `regions`
+       - $7 \le z \le 9$: `provinces`
+       - $10 \le z \le 12$: `municipalities`
+       - $z \ge 13$: `barangays`
+     - Supports optional `level` query override (`region`, `province`, `municipality`, `barangay`).
+     - Sub-layer direct alias routing: `/v1/tiles/regions/...`, `/v1/tiles/provinces/...`, `/v1/tiles/municipalities/...`, `/v1/tiles/barangays/...`.
+     - Feature properties: `psgc_code`, `name`, `parent_psgc`, `level`, `population`, `land_area_sqkm`.
+   - **`hazards` Layer**:
+     - Dynamic vector tiles from `hazard_zones` intersecting tile envelope.
+     - Feature properties: `id`, `hazard_type`, `severity_level`, `source_dataset`, `source_year`.
+     - Optimized geometry pipeline: `ST_ClipByBox2D(geom, envelope_4326)` with adaptive zoom-based simplification `ST_Simplify(..., 360.0 / (2^z * 2048.0))` preventing vertex blowup on complex provincial multi-polygons.
+   - **`projects` Layer**:
+     - Infrastructure projects from `projects` where `geom IS NOT NULL`.
+     - Feature properties: `id`, `contract_id`, `title`, `implementing_office`, `funding_source`, `budget_php`, `contract_cost_php`, `physical_progress_pct`, `psgc_code`.
+   - Safe empty tile handling: returns 200 OK with empty byte stream when no features intersect the tile envelope.
+3. **FastAPI Vector Tile Router (`api/routers/tiles.py`, `api/main.py`)**:
+   - Endpoint: `GET /v1/tiles/{layer}/{z}/{x}/{y}.mvt`.
+   - MIME type: `application/vnd.mapbox-vector-tile`.
+   - Platform headers: `X-Data-Version` and `X-Cache: HIT|MISS`.
+   - Registered in OpenAPI specification served at `/docs` and `/openapi.json`.
+4. **Performance & Non-Functional Requirements**:
+   - Warm cache latency under 150ms (achieved sub-10ms average on warm cache).
+   - Redis keys namespaced by `data_version` (`bantay:{data_version}:tiles:{layer}:{z}:{x}:{y}`).
+5. **Automated Verification Suite (`tests/test_milestone_07.py`)**:
+   - 11 new automated tests (69 total across repository):
+     - OpenAPI schema registration for tile endpoint.
+     - 404 response for unsupported tile layers.
+     - 400 response for invalid zoom and tile coordinates out of bounds.
+     - Projects tile generation, MIME type, `X-Data-Version`, and cache MISS/HIT verification.
+     - Hazards tile generation with Project NOAH multi-polygons.
+     - Boundaries tile hierarchy resolution across zoom levels ($z=5, 10, 13$).
+     - Boundaries tile explicit `level` query parameter override.
+     - Boundary sub-layer alias routing.
+     - Empty tile 200 OK handling.
+     - Warm tile latency SLA assertion ($< 150\text{ms}$).
+     - Baseline fixture row-count preservation.
+6. **Fixture Dataset Row-Count Assertions**:
+   - Preserved exact baseline boundary and hazard row counts: 17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, and 9 hazard zones.
+
+### Definition of Done Checklist:
+- [x] `ruff check` passes on `/pipeline`, `/api`, `/db`, and `/tests` (0 errors).
+- [x] `mypy --strict` passes on `/pipeline` and `/api` (0 errors).
+- [x] `pytest` passes (69/69 tests passing).
+- [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
+- [x] `PROGRESS.md` updated.
+- [x] Committed on branch `milestone/07-vector-tiles` with descriptive message.
+
 
 

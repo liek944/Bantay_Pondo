@@ -13,7 +13,7 @@ from api.config import get_settings
 from api.middleware.logging import StructuredLoggingMiddleware
 from api.middleware.metrics import MetricsMiddleware, render_prometheus_metrics
 from api.middleware.request_id import RequestIDMiddleware
-from api.routers import contractors, health, localities, meta, projects, rankings
+from api.routers import contractors, health, localities, meta, projects, rankings, tiles
 from api.services.data_version import get_current_data_version
 
 logger = logging.getLogger("api")
@@ -79,6 +79,7 @@ def create_app() -> FastAPI:
     app.include_router(contractors.router)
     app.include_router(rankings.router)
     app.include_router(meta.router)
+    app.include_router(tiles.router)
 
     # Prometheus metrics endpoint
     @app.get("/metrics", response_class=PlainTextResponse, tags=["Observability"])
