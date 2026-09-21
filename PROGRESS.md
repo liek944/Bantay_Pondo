@@ -16,7 +16,7 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 | 6 | API endpoints, no tiles yet | **COMPLETED** | `milestone/06-api-endpoints` | 58 passing |
 | 7 | Vector tiles | **COMPLETED** | `milestone/07-vector-tiles` | 69 passing |
 | 8 | Contractor dedupe, procurement join, flags | **COMPLETED** | `milestone/08-contractor-flags` | 84 passing |
-| 9 | CI, deployment compose, nginx, observability | Pending | — | — |
+| 9 | CI, deployment compose, nginx, observability | **COMPLETED** | `milestone/09-ci-deployment-observability` | 103 passing |
 
 ---
 
@@ -439,3 +439,73 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 - [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
 - [x] `PROGRESS.md` updated.
 - [x] Committed on branch `milestone/08-contractor-flags` with descriptive message.
+
+---
+
+## Milestone 9 Details: CI, Deployment Compose, Nginx, Observability
+
+- **Status**: Complete
+- **Branch**: `milestone/09-ci-deployment-observability`
+- **Completed On**: 2026-09-21
+
+### Deliverables:
+1. **GitHub Actions CI Workflow (`.github/workflows/ci.yml`)**:
+   - Automated workflow triggered on `push` (`main`, `milestone/*`) and `pull_request` (`main`).
+   - `lint-and-typecheck` job: executes `ruff check pipeline api db tests` and `mypy --strict pipeline api` with Python 3.12.
+   - `test` job: service containers for PostgreSQL 16 (`postgis/postgis:16-3.4-alpine`) and Redis 7 (`redis:7-alpine`) with health checks, runs Alembic migrations (`alembic upgrade head`), loads fixtures, and executes `pytest -v`.
+   - `build-images` job: sets up Docker Buildx, verifies build of both `infra/Dockerfile.api` and `infra/Dockerfile.pipeline`.
+2. **Production Nginx Configuration & Rate Limiting (`infra/nginx/nginx.conf`)**:
+   - Structured JSON access logging (`json_combined`) with request IDs, status codes, and upstream response times.
+   - Global gzip compression for JSON, text, and MVT vector tile streams (`application/vnd.mapbox-vector-tile`).
+   - Rate limiting at the Nginx layer: `limit_req_zone $binary_remote_addr zone=api_limit:10m rate=60r/m` returning HTTP 429.
+   - Strict adherence to SPEC rate limiting policies:
+     - Vector tiles (`/v1/tiles/`): **Uncapped** per SPEC (no `limit_req`, proxy buffering enabled, 1-hour cache headers).
+     - API endpoints (`/v1/`): **Capped** at 60 req/min per IP per SPEC (`limit_req zone=api_limit burst=10 nodelay`).
+   - Let's Encrypt support: ACME HTTP-01 challenge routing (`/.well-known/acme-challenge/ -> /var/www/certbot`), permanent HTTPS redirect, HTTP/2 on port 443, modern TLS 1.2/1.3 ciphers, and security headers (HSTS, nosniff, frame deny).
+   - Request ID injection (`proxy_set_header X-Request-ID $request_id`) and standard forwarding headers.
+3. **Single-EC2 Production Docker Compose Stack (`infra/docker-compose.prod.yml`, `docker-compose.prod.yml`)**:
+   - `db`: `postgis/postgis:16-3.4-alpine` on isolated bridge network, healthcheck, persistent volume `bantay_prod_pg_data`.
+   - `redis`: `redis:7-alpine` in append-only persistence mode with password authentication and healthcheck.
+   - `api`: built from `infra/Dockerfile.api` (multi-stage, non-root `appuser` UID 10001), healthcheck on `/healthz`, internal container routing.
+   - `nginx`: `nginx:1.27-alpine` reverse proxy exposing ports 80/443, mounts certificates and configuration.
+   - `certbot`: automated renewal loop sleeping 12h, sharing webroot and conf volumes with Nginx.
+   - `prometheus`: `prom/prometheus:v2.54.1` with scrape configuration and persistent storage `bantay_prod_prom_data`.
+4. **Prometheus Observability Configuration (`infra/prometheus/prometheus.yml`)**:
+   - Configured scraper targeting `api:8000/metrics` every 15s with job name `bantay_pondo_api`.
+5. **Production Deployment & SSL Bootstrap Scripts (`infra/scripts/`, `.env.prod.example`)**:
+   - `infra/scripts/init-letsencrypt.sh`: bootstraps initial SSL certificates using dummy certs to prevent Nginx startup failure before certbot acquisition.
+   - `infra/scripts/deploy.sh`: validates environment, pulls/builds images, runs Alembic migrations, starts services, and verifies health and readiness probes.
+   - `.env.prod.example`: production environment variable template with credentials and security guidelines.
+6. **API Resilience & Event Loop Cache Lifecycle (`api/cache.py`)**:
+   - Added active asyncio event loop tracking on Redis text and binary client singletons to prevent "Event loop is closed" errors across async pytest sessions and worker restarts.
+7. **Automated Verification Suite (`tests/test_milestone_09.py`)**:
+   - 19 new automated tests (103 total across repository, 100% passing):
+     - CI workflow triggers, jobs, steps, commands, and service containers.
+     - Nginx syntax, 60 req/min API rate limit, uncapped tile access, and Let's Encrypt challenge routing.
+     - Production Docker Compose services, health checks, port bindings, and non-root Dockerfiles.
+     - Prometheus scrape configuration.
+     - Deployment script executability and permissions.
+     - Observability: Request ID propagation and auto-generation.
+     - Observability: Prometheus `/metrics` exposition format.
+     - API Contract: `/healthz` and `/readyz` probes.
+     - API Contract: `/openapi.json` completeness against all SPEC routes.
+     - API Contract: `/v1/localities/search` typeahead query, items, and metadata.
+     - API Contract: `/v1/localities/{psgc_code}` profile, metrics history, and officials.
+     - API Contract: `/v1/localities/{psgc_code}/projects` pagination and filtering.
+     - API Contract: `/v1/localities/compare` side-by-side comparison deltas.
+     - API Contract: `/v1/projects/{contract_id}` detail with flags and related awards.
+     - API Contract: `/v1/contractors/{id}` profile and HHI district concentration.
+     - API Contract: `/v1/rankings` leaderboards by metric and level.
+     - API Contract: `/v1/tiles/{layer}/{z}/{x}/{y}.mvt` vector tile protocol buffers across boundaries, hazards, and projects.
+     - API Contract: `/v1/meta/datasets` dataset provenance, record counts, and sha256 checksums.
+     - Baseline fixture row-count preservation.
+8. **Fixture Dataset Row-Count Assertions**:
+   - Preserved exact baseline boundary and hazard row counts: 17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, and 9 hazard zones.
+
+### Definition of Done Checklist:
+- [x] `ruff check` passes on `/pipeline`, `/api`, `/db`, and `/tests` (0 errors).
+- [x] `mypy --strict` passes on `/pipeline` and `/api` (0 errors).
+- [x] `pytest` passes (103/103 tests passing).
+- [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
+- [x] `PROGRESS.md` updated.
+- [x] Committed on branch `milestone/09-ci-deployment-observability` with descriptive message.

@@ -15,20 +15,21 @@ logger = logging.getLogger(__name__)
 
 _redis_client: aioredis.Redis | None = None
 _redis_binary_client: aioredis.Redis | None = None
+_redis_loop: Any = None
+_redis_binary_loop: Any = None
 
 
 def get_redis_client() -> aioredis.Redis:
     """Return async Redis client instance, refreshing if event loop changed."""
-    global _redis_client
-    try:
-        import asyncio
+    global _redis_client, _redis_loop
+    import asyncio
 
+    try:
         current_loop = asyncio.get_running_loop()
-        if _redis_client is not None:
-            pool = getattr(_redis_client, "connection_pool", None)
-            pool_loop = getattr(pool, "_loop", None)
-            if pool_loop is not None and (pool_loop.is_closed() or pool_loop is not current_loop):
-                _redis_client = None
+        if _redis_client is not None and (
+            _redis_loop is None or _redis_loop.is_closed() or _redis_loop is not current_loop
+        ):
+            _redis_client = None
     except RuntimeError:
         pass
 
@@ -40,21 +41,26 @@ def get_redis_client() -> aioredis.Redis:
             socket_timeout=2.0,
             socket_connect_timeout=2.0,
         )
+        try:
+            _redis_loop = asyncio.get_running_loop()
+        except RuntimeError:
+            _redis_loop = None
     return _redis_client
 
 
 def get_redis_binary_client() -> aioredis.Redis:
     """Return async Redis binary client instance (decode_responses=False) for raw bytes."""
-    global _redis_binary_client
-    try:
-        import asyncio
+    global _redis_binary_client, _redis_binary_loop
+    import asyncio
 
+    try:
         current_loop = asyncio.get_running_loop()
-        if _redis_binary_client is not None:
-            pool = getattr(_redis_binary_client, "connection_pool", None)
-            pool_loop = getattr(pool, "_loop", None)
-            if pool_loop is not None and (pool_loop.is_closed() or pool_loop is not current_loop):
-                _redis_binary_client = None
+        if _redis_binary_client is not None and (
+            _redis_binary_loop is None
+            or _redis_binary_loop.is_closed()
+            or _redis_binary_loop is not current_loop
+        ):
+            _redis_binary_client = None
     except RuntimeError:
         pass
 
@@ -66,12 +72,16 @@ def get_redis_binary_client() -> aioredis.Redis:
             socket_timeout=2.0,
             socket_connect_timeout=2.0,
         )
+        try:
+            _redis_binary_loop = asyncio.get_running_loop()
+        except RuntimeError:
+            _redis_binary_loop = None
     return _redis_binary_client
 
 
 async def close_redis_client() -> None:
     """Close shared Redis client connection pools."""
-    global _redis_client, _redis_binary_client
+    global _redis_client, _redis_binary_client, _redis_loop, _redis_binary_loop
     if _redis_client is not None:
         try:
             await _redis_client.aclose()
@@ -79,6 +89,7 @@ async def close_redis_client() -> None:
             logger.warning("Error closing Redis client: %s", exc)
         finally:
             _redis_client = None
+            _redis_loop = None
 
     if _redis_binary_client is not None:
         try:
@@ -87,6 +98,7 @@ async def close_redis_client() -> None:
             logger.warning("Error closing Redis binary client: %s", exc)
         finally:
             _redis_binary_client = None
+            _redis_binary_loop = None
 
 
 def build_cache_key(data_version: str, route: str, **kwargs: Any) -> str:
