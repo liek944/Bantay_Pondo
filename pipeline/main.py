@@ -7,9 +7,14 @@ from pathlib import Path
 from typing import TypedDict
 
 from db.session import get_db_connection
+from pipeline.stages.dedupe_contractors import ContractorDedupeResult, dedupe_contractors
 from pipeline.stages.fetch import fetch_file
 from pipeline.stages.ingest_dpwh import ProjectIngestionResult, ingest_dpwh_projects
 from pipeline.stages.ingest_noah import ingest_noah_hazards
+from pipeline.stages.ingest_procurement import (
+    ProcurementIngestionResult,
+    ingest_philgeps_awards,
+)
 from pipeline.stages.ingest_psgc import ingest_geojson_boundaries
 from pipeline.stages.score import ScoringJobResult, compute_and_store_locality_metrics
 
@@ -70,6 +75,7 @@ NOAH_DATASETS: list[HazardDatasetConfig] = [
 
 
 DPWH_PROJECTS_URL = "https://huggingface.co/datasets/bettergovph/dpwh-transparency-data/resolve/main/dpwh_transparency_data.parquet"
+PHILGEPS_AWARDS_URL = "https://huggingface.co/datasets/bettergovph/philgeps-data/resolve/main/philgeps.parquet"
 
 
 def run_ingest_boundaries(levels: list[str] | None = None) -> dict[str, int]:
@@ -146,6 +152,63 @@ def run_ingest_projects(limit: int | None = None) -> ProjectIngestionResult:
     return stats
 
 
+def run_dedupe_contractors(limit: int | None = None) -> ContractorDedupeResult:
+    """Deduplicate contractors with pg_trgm similarity > 0.9 and link projects."""
+    logger.info("--- Stage: Contractor Deduplication & Entity Clustering ---")
+    parquet_path = RAW_DATA_DIR / "dpwh_transparency_data.parquet"
+    if not parquet_path.exists():
+        res = fetch_file(
+            DPWH_PROJECTS_URL,
+            RAW_DATA_DIR,
+            filename="dpwh_transparency_data.parquet",
+        )
+        parquet_path = Path(res["path"])
+
+    with get_db_connection() as conn:
+        res_dict = dedupe_contractors(conn, filepath=parquet_path, limit=limit)
+    logger.info(
+        "Stage dedupe contractors SUCCESS: %d raw -> %d canonical. %d linked.",
+        res_dict["total_raw"],
+        res_dict["canonical_entities"],
+        res_dict["projects_linked"],
+    )
+    return res_dict
+
+
+def run_ingest_procurement(
+    limit: int | None = None,
+    filepath: Path | None = None,
+) -> ProcurementIngestionResult:
+    """Fetch and ingest PhilGEPS procurement awards with contractor and PSGC linking."""
+    logger.info("--- Stage: Fetch & Ingest PhilGEPS Procurement Awards ---")
+    if filepath is None:
+        parquet_path = RAW_DATA_DIR / "philgeps.parquet"
+        if not parquet_path.exists():
+            res = fetch_file(
+                PHILGEPS_AWARDS_URL,
+                RAW_DATA_DIR,
+                filename="philgeps.parquet",
+            )
+            parquet_path = Path(res["path"])
+    else:
+        parquet_path = filepath
+
+    with get_db_connection() as conn:
+        stats = ingest_philgeps_awards(
+            conn=conn,
+            filepath=parquet_path,
+            limit=limit,
+        )
+    logger.info(
+        "Stage PhilGEPS awards SUCCESS: %d in, %d inserted, %d linked contractors, %d rejects",
+        stats["total_in"],
+        stats["inserted"],
+        stats["contractors_linked"],
+        stats["rejects"],
+    )
+    return stats
+
+
 def run_score_job(
     year: int | None = None,
     levels: list[str] | None = None,
@@ -186,6 +249,28 @@ def main() -> None:
         help="Limit number of project rows to ingest",
     )
 
+    dedupe_parser = subparsers.add_parser(
+        "dedupe-contractors",
+        help="Deduplicate contractor entities with trigram fuzzy matching",
+    )
+    dedupe_parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Limit number of project rows to deduplicate contractors from",
+    )
+
+    procure_parser = subparsers.add_parser(
+        "ingest-procurement",
+        help="Fetch and ingest PhilGEPS procurement awards",
+    )
+    procure_parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Limit number of award records to ingest",
+    )
+
     score_parser = subparsers.add_parser(
         "score", help="Compute mismatch scores and locality metrics"
     )
@@ -211,6 +296,18 @@ def main() -> None:
         default=None,
         help="Limit number of project rows to ingest during all",
     )
+    all_parser.add_argument(
+        "--limit-contractors",
+        type=int,
+        default=None,
+        help="Limit number of contractor records during all",
+    )
+    all_parser.add_argument(
+        "--limit-procurement",
+        type=int,
+        default=None,
+        help="Limit number of procurement award records during all",
+    )
 
     args = parser.parse_args()
 
@@ -220,6 +317,10 @@ def main() -> None:
         run_ingest_hazards()
     elif args.command == "ingest-projects":
         run_ingest_projects(limit=args.limit)
+    elif args.command == "dedupe-contractors":
+        run_dedupe_contractors(limit=args.limit)
+    elif args.command == "ingest-procurement":
+        run_ingest_procurement(limit=args.limit)
     elif args.command == "score":
         lvl = None if args.level == "all" else [args.level]
         run_score_job(year=args.year, levels=lvl)
@@ -227,6 +328,8 @@ def main() -> None:
         run_ingest_boundaries()
         run_ingest_hazards()
         run_ingest_projects(limit=args.limit_projects)
+        run_dedupe_contractors(limit=args.limit_contractors)
+        run_ingest_procurement(limit=args.limit_procurement)
         run_score_job()
     else:
         parser.print_help()

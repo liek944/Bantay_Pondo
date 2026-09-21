@@ -119,7 +119,7 @@ async def evaluate_project_flags(
                     FROM projects
                     WHERE psgc_code = %s
                       AND EXTRACT(YEAR FROM start_date) = %s
-                      AND description = %s
+                      AND LOWER(TRIM(description)) = LOWER(TRIM(%s))
                       AND contract_id != %s
                     """,
                     (psgc_code, year, description, contract_id),
@@ -144,8 +144,66 @@ async def evaluate_project_flags(
                     )
 
             # Flag 5: project coordinates fall outside its stated region
-            if psgc_code and project_data.get("has_geom"):
-                # Check if point falls within region polygon
+            stated_region_psgc: str | None = project_data.get("stated_region_psgc")
+            has_geom = project_data.get("has_geom") or (
+                project_data.get("latitude") is not None
+                and project_data.get("longitude") is not None
+            )
+
+            if not stated_region_psgc and office:
+                # Check if office name matches a region name
+                await cur.execute(
+                    """
+                    SELECT psgc_code FROM regions
+                    WHERE %s ILIKE '%%' || name || '%%'
+                       OR name ILIKE '%%' || %s || '%%'
+                    LIMIT 1;
+                    """,
+                    (office, office),
+                )
+                r_match = await cur.fetchone()
+                if r_match:
+                    stated_region_psgc = str(r_match[0])
+                else:
+                    # Check if office matches a province name, then get province's region parent
+                    await cur.execute(
+                        """
+                        SELECT parent_psgc FROM provinces
+                        WHERE %s ILIKE '%%' || name || '%%'
+                        LIMIT 1;
+                        """,
+                        (office,),
+                    )
+                    p_match = await cur.fetchone()
+                    if p_match and p_match[0]:
+                        stated_region_psgc = str(p_match[0])
+
+            if stated_region_psgc and has_geom:
+                await cur.execute(
+                    """
+                    SELECT ST_Contains(r.geom, p.geom)
+                    FROM projects p, regions r
+                    WHERE p.contract_id = %s
+                      AND r.psgc_code = %s
+                    LIMIT 1;
+                    """,
+                    (contract_id, stated_region_psgc),
+                )
+                spatial_row = await cur.fetchone()
+                if spatial_row is not None and spatial_row[0] is False:
+                    flags.append(
+                        ProjectFlag(
+                            code="COORDINATES_OUTSIDE_REGION",
+                            message="Project coordinates fall outside the stated region boundary",
+                            severity="warning",
+                            details={
+                                "contract_id": contract_id,
+                                "stated_region_psgc": stated_region_psgc,
+                            },
+                        )
+                    )
+            elif psgc_code and has_geom:
+                # Fallback to checking assigned region
                 await cur.execute(
                     """
                     SELECT ST_Contains(r.geom, p.geom)
@@ -155,7 +213,7 @@ async def evaluate_project_flags(
                     JOIN provinces prov ON m.parent_psgc = prov.psgc_code
                     JOIN regions r ON prov.parent_psgc = r.psgc_code
                     WHERE p.contract_id = %s
-                    LIMIT 1
+                    LIMIT 1;
                     """,
                     (contract_id,),
                 )
@@ -242,16 +300,29 @@ async def get_project_detail(
                 "region_name": row[20],
             }
 
-            # Fetch related procurement awards
+            # Fetch related procurement awards matching contract ID, contractor, or PSGC
             awards_sql = """
                 SELECT id, reference_id, title, award_amount_php, award_date, procuring_entity
                 FROM procurement_awards
-                WHERE (contractor_id IS NOT NULL AND contractor_id = %s)
+                WHERE reference_id = %s
+                   OR title ILIKE '%%' || %s || '%%'
+                   OR (contractor_id IS NOT NULL AND contractor_id = %s)
                    OR (psgc_code IS NOT NULL AND psgc_code = %s)
-                ORDER BY award_date DESC NULLS LAST
+                ORDER BY
+                    (reference_id = %s) DESC,
+                    award_date DESC NULLS LAST
                 LIMIT 10
             """
-            await cur.execute(awards_sql, (proj_data["contractor_id"], proj_data["psgc_code"]))
+            await cur.execute(
+                awards_sql,
+                (
+                    contract_id,
+                    contract_id,
+                    proj_data["contractor_id"],
+                    proj_data["psgc_code"],
+                    contract_id,
+                ),
+            )
             award_rows = await cur.fetchall()
             related_awards = [
                 ProcurementAwardSummary(

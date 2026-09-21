@@ -15,7 +15,7 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 | 5 | Scoring job with tests | **COMPLETED** | `milestone/05-scoring-job` | 41 passing |
 | 6 | API endpoints, no tiles yet | **COMPLETED** | `milestone/06-api-endpoints` | 58 passing |
 | 7 | Vector tiles | **COMPLETED** | `milestone/07-vector-tiles` | 69 passing |
-| 8 | Contractor dedupe, procurement join, flags | Pending | — | — |
+| 8 | Contractor dedupe, procurement join, flags | **COMPLETED** | `milestone/08-contractor-flags` | 84 passing |
 | 9 | CI, deployment compose, nginx, observability | Pending | — | — |
 
 ---
@@ -367,5 +367,75 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 - [x] `PROGRESS.md` updated.
 - [x] Committed on branch `milestone/07-vector-tiles` with descriptive message.
 
+---
 
+## Milestone 8 Details: Contractor Dedupe, Procurement Join, Flags
 
+- **Status**: Complete
+- **Branch**: `milestone/08-contractor-flags`
+- **Completed On**: 2026-09-21
+
+### Deliverables:
+1. **Contractor Deduplication Stage (`pipeline/stages/dedupe_contractors.py`)**:
+   - `normalize_contractor_name`: Implemented exact SPEC normalizer:
+     - Upper-casing string.
+     - Stripping registration codes e.g. `(16102)`, `([REVOKED] 40908)`.
+     - Stripping former name parentheticals `(FORMERLY: ...)`.
+     - Splitting and normalizing joint venture members separated by ` / `.
+     - Stripping legal suffixes (`INC`, `CORP`, `CO`, `ENTERPRISES`, `CONSTRUCTION` and common variants).
+     - Collapsing whitespace.
+   - `compute_trigram_similarity`: Implemented pure Python trigram calculation with standard `pg_trgm` padding (`  ` + s + ` `), achieving exact parity with PostgreSQL's `similarity()` to 4 decimal places.
+   - `dedupe_and_upsert_contractors`: Clustered raw contractor variants using PostgreSQL `pg_trgm` (`%%` operator with `similarity > 0.9` and exact `normalized_name`), merging raw aliases into `contractors.raw_names` (`text[]`).
+   - `link_projects_to_contractors`: Linked each project in `projects` to its canonical `contractor_id`.
+   - `update_contractor_aggregated_metrics`: Recalculated and materialized `total_contracts`, `total_value_php`, and `first_seen` directly from linked projects.
+2. **DPWH Projects Contractor Integration (`pipeline/stages/ingest_dpwh.py`)**:
+   - Extracted raw contractor strings from DPWH parquet rows in `parse_and_normalize_project`.
+   - Enabled automatic mapping and foreign key updates for DPWH projects.
+3. **PhilGEPS Procurement Awards Ingestion (`pipeline/stages/ingest_procurement.py`)**:
+   - Built complete ingestion stage with schema validation against `bettergovph/philgeps-data`.
+   - `parse_and_normalize_award`: Normalized title, parsed reference IDs, amounts, and dates.
+   - Quarantining malformed rows (missing title or amount) into `rejects` table via `record_reject` without silent drops.
+   - Resolved `contractor_id` by matching normalized `awardee_name` against canonical contractors via `pg_trgm`.
+   - Resolved `psgc_code` from `area_of_delivery` matching against `provinces` and `regions`.
+   - Reconciled DPWH `projects.contract_cost_php` from matching procurement award amounts.
+   - Accounting invariant asserted: `total_in == inserted + rejects`.
+4. **Rule-Based Risk Flags Refinement (`api/services/projects.py`)**:
+   - Implemented and refined all 5 SPEC rule-based flags (never declarations of wrongdoing):
+     1. `COST_OVERRUN_15PCT`: Contract cost exceeds approved budget by $> 15\%$.
+     2. `DELAYED_LOW_PROGRESS`: Physical progress $< 20\%$ more than 12 months past target completion.
+     3. `DISTRICT_CONTRACTOR_CONCENTRATION_40PCT`: Contractor holds $> 40\%$ of implementing office's total project value (now backed by real deduplicated contractor links).
+     4. `DUPLICATE_DESCRIPTION_BARANGAY_YEAR`: Duplicate project descriptions in the same locality and year.
+     5. `COORDINATES_OUTSIDE_REGION`: Project coordinates fall outside stated region boundary (resolving stated region from `implementing_office` or location metadata and evaluating PostGIS `ST_Contains`).
+   - `get_project_detail`: Returning evaluated flags and related procurement awards matching contract ID, contractor, or PSGC code in `GET /v1/projects/{contract_id}`.
+5. **Pipeline CLI Runner Integration (`pipeline/main.py`)**:
+   - Registered CLI subcommands:
+     - `dedupe-contractors [--limit N]`
+     - `ingest-procurement [--limit N]`
+   - Updated `all` command sequence to execute boundaries -> hazards -> projects -> contractor dedupe -> procurement awards -> scoring.
+6. **Automated Verification Suite (`tests/test_milestone_08.py`)**:
+   - 15 new automated tests (84 total across repository):
+     - Contractor name normalization (suffixes, registration codes, joint ventures, whitespace).
+     - Trigram similarity math parity with PostgreSQL `pg_trgm`.
+     - Fuzzy matching clustering into canonical entities with preserved raw aliases.
+     - Project contractor linking and aggregated metrics updates (`total_contracts`, `total_value_php`, `first_seen`).
+     - PhilGEPS award normalization and rejects quarantine.
+     - PhilGEPS awards ingestion and contract cost reconciliation.
+     - PSGC province map resolution.
+     - Flag 1: Cost overrun $> 15\%$.
+     - Flag 2: Delayed low progress ($< 20\%$ after $> 12$ months).
+     - Flag 3: District contractor concentration $> 40\%$.
+     - Flag 4: Duplicate description in same barangay and year.
+     - Flag 5: Coordinates outside stated region.
+     - API project detail endpoint with flags and related procurement awards.
+     - API contractor profile endpoint with linked projects and HHI concentration.
+     - Baseline fixture row-count preservation.
+7. **Fixture Dataset Row-Count Assertions**:
+   - Preserved exact baseline boundary and hazard row counts: 17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, and 9 hazard zones.
+
+### Definition of Done Checklist:
+- [x] `ruff check` passes on `/pipeline`, `/api`, `/db`, and `/tests` (0 errors).
+- [x] `mypy --strict` passes on `/pipeline` and `/api` (0 errors).
+- [x] `pytest` passes (84/84 tests passing).
+- [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
+- [x] `PROGRESS.md` updated.
+- [x] Committed on branch `milestone/08-contractor-flags` with descriptive message.

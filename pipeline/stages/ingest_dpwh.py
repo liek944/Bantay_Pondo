@@ -139,11 +139,15 @@ def parse_and_normalize_project(
         json.dumps(row, sort_keys=True, default=str).encode("utf-8")
     ).hexdigest()
 
+    contractor_raw = row.get("contractor")
+    contractor = str(contractor_raw).strip() if contractor_raw is not None else None
+
     normalized: dict[str, Any] = {
         "contract_id": contract_id,
         "title": title,
         "description": description,
         "implementing_office": implementing_office,
+        "contractor": contractor,
         "funding_source": funding_source,
         "budget_php": budget_php,
         "contract_cost_php": contract_cost_php,
