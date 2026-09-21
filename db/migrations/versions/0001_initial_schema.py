@@ -196,7 +196,13 @@ def upgrade() -> None:
             sa.Column("id", sa.BigInteger(), sa.Identity(always=False), nullable=False),
             sa.Column(
                 "hazard_type",
-                postgresql.ENUM("flood", "landslide", "storm_surge", name="hazard_type_enum"),
+                postgresql.ENUM(
+                    "flood",
+                    "landslide",
+                    "storm_surge",
+                    name="hazard_type_enum",
+                    create_type=False,
+                ),
                 nullable=False,
             ),
             sa.Column("severity_level", sa.Integer(), nullable=False),
