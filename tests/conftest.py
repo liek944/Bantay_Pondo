@@ -1,13 +1,15 @@
 """Pytest configuration and fixtures for Bantay Pondo."""
 
-from collections.abc import Generator
+from collections.abc import AsyncGenerator, Generator
 from typing import Any
 
+import httpx
 import psycopg
 import pytest
 import redis
 
 from api.config import Settings, get_settings
+from api.main import app
 from db.session import get_raw_conninfo
 
 
@@ -30,3 +32,12 @@ def redis_client(settings: Settings) -> Generator[redis.Redis, None, None]:
     client: redis.Redis = redis.from_url(settings.redis_url, decode_responses=True)
     yield client
     client.close()
+
+
+@pytest.fixture(scope="function")
+async def async_client() -> AsyncGenerator[httpx.AsyncClient, None]:
+    """Provide an asynchronous HTTP test client bound to the FastAPI app."""
+    transport = httpx.ASGITransport(app=app)
+    async with httpx.AsyncClient(transport=transport, base_url="http://testserver") as client:
+        yield client
+

@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     api_port: int = 8000
     log_level: str = "INFO"
     data_version: str = "v1.0.0"
+    cache_ttl_seconds: int = 300
+    default_page_size: int = 20
+    max_page_size: int = 100
 
     model_config = SettingsConfigDict(
         env_file=".env",

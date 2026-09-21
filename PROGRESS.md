@@ -13,7 +13,7 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 | 3 | Ingestion for PSGC boundaries and NOAH hazards only, with row-count assertions | **COMPLETED** | `milestone/03-psgc-noah-ingestion` | 23 passing |
 | 4 | Ingestion for DPWH projects, including the spatial join and review queue | **COMPLETED** | `milestone/04-dpwh-ingestion` | 31 passing |
 | 5 | Scoring job with tests | **COMPLETED** | `milestone/05-scoring-job` | 41 passing |
-| 6 | API endpoints, no tiles yet | Pending | — | — |
+| 6 | API endpoints, no tiles yet | **COMPLETED** | `milestone/06-api-endpoints` | 58 passing |
 | 7 | Vector tiles | Pending | — | — |
 | 8 | Contractor dedupe, procurement join, flags | Pending | — | — |
 | 9 | CI, deployment compose, nginx, observability | Pending | — | — |
@@ -234,4 +234,70 @@ Project tracking across the 9 sequential delivery milestones specified in [SPEC.
 - [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
 - [x] `PROGRESS.md` updated.
 - [x] Committed on branch `milestone/05-scoring-job` with descriptive message.
+
+---
+
+## Milestone 6 Details: API Endpoints, No Tiles Yet
+
+- **Status**: Complete
+- **Branch**: `milestone/06-api-endpoints`
+- **Completed On**: 2026-09-21
+
+### Deliverables:
+1. **Core API Configuration & Redis Caching Layer (`api/config.py`, `api/cache.py`)**:
+   - Configuration for cache TTL (300s), default pagination (20), and max limit (100).
+   - Async Redis caching engine with namespaced keys: `bantay:{data_version}:{route}:{sorted_params}`.
+   - Robust error handling: transparently falls back to direct PostgreSQL query execution if Redis times out or is temporarily unavailable.
+   - Response header injection: `X-Cache: HIT` / `X-Cache: MISS` and `X-Data-Version: ...`.
+2. **Observability, Tracing & Middlewares (`api/middleware/`)**:
+   - `RequestIDMiddleware`: extracts incoming `X-Request-ID` or generates UUID4, persisting it through response headers.
+   - `StructuredLoggingMiddleware`: structured JSON access logging with duration in milliseconds, status codes, and client IP.
+   - `MetricsMiddleware` & `/metrics`: Prometheus metrics collector exposing request totals by method/endpoint/status and request durations in standard Prometheus exposition format.
+3. **Pydantic Schemas (`api/schemas/`)**:
+   - `common.py`: BaseResponse guaranteeing `data_version`, generic `PaginatedResponse[T]`, and `ErrorResponse`.
+   - `localities.py`: Locality search results with similarity scores, profile response, metrics history, officials summary, and side-by-side comparison deltas.
+   - `projects.py`: Project summary, detailed view with geocoded barangay/municipality/province/region hierarchy, procurement awards, and rule-based risk flags.
+   - `contractors.py`: Contractor summary, contracts list, and Herfindahl-Hirschman Index (HHI) concentration metrics with market shares per implementing office.
+   - `rankings.py`: Leaderboards ranked by `mismatch_score`, `total_spend_php`, `hazard_exposure_pct`, `spend_per_capita`, `population_at_risk`.
+   - `meta.py`: Source provenance, last refresh timestamps, record counts, and checksums for all platform datasets.
+   - `health.py`: Liveness and readiness probe responses.
+4. **Database Services & Business Logic (`api/services/`)**:
+   - `data_version.py`: Active dataset version lookup with database fallback to configuration.
+   - `localities.py`: Trigram-backed similarity typeahead search, hierarchical profile lookup, paginated project filtering, and comparison deltas.
+   - `projects.py`: Project detail with rule-based flag evaluations (`COST_OVERRUN_15PCT`, `DELAYED_LOW_PROGRESS`, `DISTRICT_CONTRACTOR_CONCENTRATION_40PCT`, `DUPLICATE_DESCRIPTION_BARANGAY_YEAR`, `COORDINATES_OUTSIDE_REGION`).
+   - `contractors.py`: Profile resolution and HHI market concentration calculation ($HHI = \sum s_i^2 \times 10,000$).
+   - `rankings.py`: Leaderboard ranking aggregations by metric and administrative level.
+   - `meta.py`: Dataset provenance and row-count tracking from manifest and database.
+5. **FastAPI Application & Routers (`api/main.py`, `api/routers/`)**:
+   - Lifespan management for Redis and database connection pools.
+   - Registered routers: `/healthz`, `/readyz`, `/v1/localities`, `/v1/projects`, `/v1/contractors`, `/v1/rankings`, `/v1/meta/datasets`.
+   - OpenAPI documentation served at `/docs`, `/redoc`, and `/openapi.json`.
+6. **Automated Verification Suite (`tests/test_milestone_06.py`)**:
+   - 17 new automated tests (58 total across repository):
+     - Health and readiness endpoints (`/healthz`, `/readyz`).
+     - Prometheus metrics text format (`/metrics`).
+     - OpenAPI schema completeness.
+     - Trigram locality typeahead search.
+     - Locality profile, metrics history, and officials.
+     - Locality projects pagination and budget filtering.
+     - Side-by-side locality comparison.
+     - Project detail and rule-based flags.
+     - Pure logic flag evaluation.
+     - Contractor profile and HHI concentration calculation.
+     - Rankings leaderboards.
+     - Platform datasets provenance.
+     - Redis caching HIT / MISS verification.
+     - Request ID tracing middleware.
+     - Baseline fixture row-count preservation.
+7. **Fixture Dataset Row-Count Assertions**:
+   - Preserved exact baseline boundary and hazard row counts: 17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, and 9 hazard zones.
+
+### Definition of Done Checklist:
+- [x] `ruff check` passes on `/pipeline`, `/api`, `/db`, and `/tests` (0 errors).
+- [x] `mypy --strict` passes on `/pipeline` and `/api` (0 errors).
+- [x] `pytest` passes (58/58 tests passing in 2m 42s).
+- [x] Row-count assertions hold on the fixture dataset (17 regions, 82 provinces, 1,620 municipalities, 41,803 barangays, 9 hazard zones).
+- [x] `PROGRESS.md` updated.
+- [x] Committed on branch `milestone/06-api-endpoints` with descriptive message.
+
 
