@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "error": "#ba1a1a",
+        "surface-dim": "#dfd9d4",
+        "on-error-container": "#93000a",
+        "tertiary": "#510501",
+        "primary-fixed": "#b9eceb",
+        "on-background": "#1d1b18",
+        "on-error": "#ffffff",
+        "inverse-on-surface": "#f6f0ea",
+        "on-primary": "#ffffff",
+        "surface-container": "#f3ede7",
+        "on-secondary": "#ffffff",
+        "on-tertiary-fixed-variant": "#80281c",
+        "on-primary-container": "#7daead",
+        "surface-container-lowest": "#ffffff",
+        "primary-fixed-dim": "#9ed0cf",
+        "secondary-fixed": "#eae1d8",
+        "surface-bright": "#fff8f3",
+        "surface-container-highest": "#e8e1dc",
+        "surface-container-low": "#f9f2ed",
+        "on-secondary-fixed": "#1f1b16",
+        "on-tertiary": "#ffffff",
+        "background": "#fff8f3",
+        "on-surface": "#1d1b18",
+        "inverse-primary": "#9ed0cf",
+        "on-surface-variant": "#404848",
+        "primary": "#002b2b",
+        "on-primary-fixed": "#002020",
+        "outline-variant": "#c0c8c7",
+        "outline": "#707978",
+        "on-secondary-fixed-variant": "#4b463f",
+        "on-secondary-container": "#69635c",
+        "surface-variant": "#e8e1dc",
+        "inverse-surface": "#33302d",
+        "surface-container-high": "#ede7e2",
+        "tertiary-container": "#701d12",
+        "surface": "#fff8f3",
+        "secondary": "#635d57",
+        "on-tertiary-fixed": "#400100",
+        "error-container": "#ffdad6",
+        "tertiary-fixed-dim": "#ffb4a7",
+        "secondary-fixed-dim": "#cec5bd",
+        "on-primary-fixed-variant": "#1b4e4e",
+        "primary-container": "#0a4242",
+        "surface-tint": "#366666"
+      },
+      "borderRadius": {
+        "DEFAULT": "0.125rem",
+        "lg": "0.25rem",
+        "xl": "0.5rem",
+        "full": "0.75rem"
+      },
+      "spacing": {
+        "margin-tablet": "2rem",
+        "space-md": "0.875rem",
+        "space-sm": "0.5rem",
+        "space-xl": "2.5rem",
+        "margin-desktop": "3rem",
+        "space-xs": "0.25rem",
+        "space-2xl": "4rem",
+        "gutter": "1.25rem",
+        "space-lg": "1.5rem",
+        "gutter-desktop": "1.75rem",
+        "margin": "1rem"
+      },
+      "fontFamily": {
+        "display-figure": ["Newsreader"],
+        "headline-lg": ["Newsreader"],
+        "headline-md": ["Newsreader"],
+        "label-caps": ["Inter"],
+        "display-figure-mobile": ["Newsreader"],
+        "data-metric": ["Inter"],
+        "body-lg": ["Newsreader"],
+        "body-md": ["Inter"],
+        "headline-sm": ["Newsreader"],
+        "headline-lg-mobile": ["Newsreader"],
+        "body-sm": ["Inter"],
+        "code-tabular": ["Inter"]
+      },
+      "fontSize": {
+        "display-figure": ["3.75rem", {"lineHeight": "1.05", "letterSpacing": "-0.025em", "fontWeight": "500"}],
+        "headline-lg": ["2.25rem", {"lineHeight": "1.2", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+        "headline-md": ["1.5rem", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+        "label-caps": ["0.6875rem", {"lineHeight": "1.3", "letterSpacing": "0.08em", "fontWeight": "600"}],
+        "display-figure-mobile": ["2.5rem", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+        "data-metric": ["1.25rem", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+        "body-lg": ["1.125rem", {"lineHeight": "1.75", "fontWeight": "400"}],
+        "body-md": ["0.9375rem", {"lineHeight": "1.6", "fontWeight": "400"}],
+        "headline-sm": ["1.125rem", {"lineHeight": "1.4", "fontWeight": "600"}],
+        "headline-lg-mobile": ["1.75rem", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+        "body-sm": ["0.8125rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+        "code-tabular": ["0.8125rem", {"lineHeight": "1.4", "fontWeight": "500"}]
+      }
+    }
+  }
+}</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest border-b border-outline-variant/60 shadow-[0_1px_4px_rgba(0,0,0,0.03)]"><div class="bg-surface-container-low/80 border-b border-outline-variant/40 px-margin-desktop py-space-xs text-on-surface-variant hidden md:block"><div class="max-w-[1440px] mx-auto flex items-center justify-between font-label-caps text-label-caps uppercase tracking-wider"><div class="flex items-center gap-space-md"><span class="flex items-center gap-1.5 text-primary font-bold"><span class="inline-block w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>Live Registry Feed</span><span class="text-outline-variant">|</span><span>Q3 2024 DPWH, PhilGEPS &amp; COA Consolidated Records</span></div><div class="flex items-center gap-space-lg"><span class="font-code-tabular text-code-tabular normal-case text-on-surface">148,204 Projects Audited</span><span class="text-outline-variant">|</span><span class="text-on-surface-variant">Updated 4h ago</span></div></div></div><div class="h-16 max-w-[1440px] mx-auto px-margin-desktop flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm group" href="#"><img alt="Bantay Pondo Brand Emblem" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xi8vTqLq-v1Sk3ayJYzTjRJDlgGd2K7KYnmB6jToq_i0lGjgvt3OidTOx2hgDrPoxCNOuSBhp2J53R7jpu8Px6wZtmuIijkMt-gPaYWj2pcovySDQTAipIlV5fUikZqrbExLeHvhoBCUsjQdx9IlZneZ3N4p2xQCKH-PDlZH1M4fvKG6lZGvit8MxQ3fZCDqHJrZP4utp92VKk_w5DVP2ff9dSb4TjD2vN_E6fp6TmKws1WZry19WZ3kM"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight leading-none group-hover:text-primary-container transition-colors">Bantay Pondo</span><span class="font-label-caps text-[0.625rem] text-secondary tracking-wider uppercase mt-0.5">Infrastructure Ledger</span></div></a><div class="h-7 w-px bg-outline-variant/50 hidden xl:block"></div><nav class="hidden lg:flex items-center gap-space-lg font-body-sm text-body-sm" data-active-classes="text-primary font-bold border-b-2 border-primary"><a class="text-on-surface-variant hover:text-on-surface py- space-sm transition-colors" data-path="national-map-search" href="#">National Map &amp; Search</a><a aria-current="page" class="py-space-sm transition-colors text-primary font-bold border-b-2 border-primary" data-path="locality-dossiers" href="#">Locality Dossiers</a><a class="text-on-surface-variant hover:text-on-surface py-space-sm transition-colors" data-path="contractor-registry" href="#">Contractor Registry</a><a class="text-on-surface-variant hover:text-on-surface py-space-sm transition-colors" data-path="compare-localities" href="#">Compare Localities</a><a class="text-on-surface-variant hover:text-on-surface py-space-sm transition-colors" data-path="methodology-data" href="#">Methodology &amp; Data</a></nav></div><div class="flex items-center gap-space-md"><button class="hidden sm:flex items-center gap-space-sm px-space-md py-1.5 rounded bg-surface-container border border-outline-variant/80 text-on-surface-variant hover:text-on-surface hover:border-outline transition-colors" type="button"><span class="material-symbols-outlined text-[16px]">search</span><span class="font-body-sm text-body-sm font-label-caps uppercase text-[0.6875rem]">Registry Search</span><kbd class="font-code-tabular text-[0.625rem] bg-surface-container-lowest border border-outline-variant/80 px-1.5 py-0.5 rounded text-secondary font-bold ml-1">⌘K</kbd></button><a class="hidden md:inline-flex items-center gap-1.5 px-space-md py-1.5 rounded border border-outline-variant text-on-surface hover:bg-surface-container-low transition-colors font-label-caps text-label-caps uppercase tracking-wider" href="#"><span class="material-symbols-outlined text-[16px] text-primary">download</span>Audit CSV</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-surface"><div class="flex flex-col w-full">
+<!-- Top Archival Editorial Dossier Header -->
+<section class="w-full bg-surface-container-low px-margin-desktop py-space-xl">
+<div class="max-w-[1360px] mx-auto flex flex-col gap-space-md">
+<!-- Breadcrumb and Live Audit Metadata -->
+<div class="flex flex-wrap items-center justify-between gap-y-2 text-secondary font-label-caps text-label-caps uppercase tracking-wider">
+<div class="flex items-center gap-2">
+<span>National Ledger</span>
+<span class="text-outline-variant">/</span>
+<span>Region II (Cagayan Valley)</span>
+<span class="text-outline-variant">/</span>
+<span>Cagayan</span>
+<span class="text-outline-variant">/</span>
+<span class="text-primary font-bold">Tuguegarao City</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-surface-container-lowest text-tertiary font-bold tracking-tight">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+            HIGH WATCHLIST AUDIT
+          </span>
+<span class="text-outline-variant">|</span>
+<span>Verified via PhilGEPS &amp; COA AAR 2023</span>
+</div>
+</div>
+<!-- Dossier Title Block with Functional Action Anchors -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-lg">
+<div class="flex flex-col">
+<span class="font-label-caps text-[0.7rem] uppercase tracking-widest text-secondary font-semibold">Public Ledger Locality Dossier #021529000</span>
+<h1 class="font-display-figure text-display-figure text-on-surface tracking-tight leading-none mt-1">Tuguegarao City</h1>
+<div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3 font-code-tabular text-body-sm text-secondary">
+<span>Province: <strong class="text-on-surface font-semibold">Cagayan</strong></span>
+<span class="text-outline-variant">·</span>
+<span>PSGC: <strong class="text-on-surface font-semibold">021529000</strong></span>
+<span class="text-outline-variant">·</span>
+<span>Class: <strong class="text-on-surface font-semibold">3rd Class Component City</strong></span>
+<span class="text-outline-variant">·</span>
+<span>Population: <strong class="text-on-surface font-semibold">166,334</strong> (2020 Census)</span>
+<span class="text-outline-variant">·</span>
+<span>Land Area: <strong class="text-on-surface font-semibold">144.80 km²</strong></span>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm">
+<button class="px-space-md py-2 rounded bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-wider hover:bg-primary-container transition-colors flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[16px]">compare_arrows</span>
+            Compare Locality
+          </button>
+<button class="px-space-md py-2 rounded bg-surface-container-lowest text-on-surface font-label-caps text-label-caps uppercase tracking-wider hover:bg-surface-container transition-colors flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[16px] text-secondary">picture_as_pdf</span>
+            Export PDF
+          </button>
+<button class="px-space-md py-2 rounded bg-surface-container-lowest text-on-surface font-label-caps text-label-caps uppercase tracking-wider hover:bg-surface-container transition-colors flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[16px] text-secondary">share</span>
+            Share Audit Link
+          </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Hero Metrics Row (Investigative Stat Blocks) -->
+<section class="w-full max-w-[1360px] mx-auto px-margin-desktop py-space-xl">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg">
+<!-- Metric Column 1: Mismatch Score -->
+<div class="p-space-lg bg-surface-container-lowest flex flex-col justify-between rounded">
+<div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase tracking-widest text-secondary font-semibold">Expenditure Mismatch Score</span>
+<span class="px-2 py-0.5 rounded bg-tertiary-container text-on-tertiary font-label-caps text-[0.625rem] tracking-wider uppercase font-bold">Critical Disparity</span>
+</div>
+<div class="flex items-baseline gap-2 mt-space-md">
+<span class="font-display-figure text-display-figure text-tertiary">91.4</span>
+<span class="font-display-figure text-headline-md text-secondary">/ 100</span>
+</div>
+<!-- Semicircle Gauge SVG -->
+<div class="w-full flex items-center justify-center my-space-md">
+<div class="relative w-48 h-24 flex items-end justify-center overflow-hidden">
+<svg class="w-full h-full transform" viewbox="0 0 200 100">
+<!-- Background track -->
+<path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e8e1dc" stroke-linecap="round" stroke-width="12"></path>
+<!-- Low Risk Sector (Green/Muted) -->
+<path d="M 20 100 A 80 80 0 0 1 55 43" fill="none" stroke="#7daead" stroke-linecap="butt" stroke-width="12"></path>
+<!-- Moderate Risk Sector (Amber) -->
+<path d="M 55 43 A 80 80 0 0 1 100 20" fill="none" stroke="#cec5bd" stroke-linecap="butt" stroke-width="12"></path>
+<!-- High Risk Sector -->
+<path d="M 100 20 A 80 80 0 0 1 145 43" fill="none" stroke="#701d12" stroke-linecap="butt" stroke-width="12"></path>
+<!-- Critical Risk Pegged Arc -->
+<path d="M 145 43 A 80 80 0 0 1 176 85" fill="none" stroke="#510501" stroke-linecap="round" stroke-width="12"></path>
+<!-- Dial Needle Indicator (pegged at 91.4%) -->
+<circle cx="100" cy="96" fill="#1d1b18" r="6"></circle>
+<line stroke="#1d1b18" stroke-linecap="round" stroke-width="3" x1="100" x2="168" y1="96" y2="76"></line>
+</svg>
+<div class="absolute bottom-0 text-center font-code-tabular text-body-sm font-bold text-tertiary">
+                Top 1.2% Risk Nationally
+              </div>
+</div>
+</div>
+</div>
+<div class="p-space-md rounded bg-surface-container-low font-body-sm text-on-surface-variant leading-relaxed mt-space-md">
+<strong class="text-tertiary uppercase font-label-caps text-label-caps block mb-1">Audit Verdict: Severe Underinvestment</strong>
+          Despite experiencing 4 major inundation events since 2020, capital flood mitigation spend remains <strong class="text-on-surface">74% below</strong> modeled hydrologic requirement for the lower Cagayan riverine basin.
+        </div>
+</div>
+<!-- Metric Column 2: Hazard Exposure -->
+<div class="p-space-lg bg-surface-container-lowest flex flex-col justify-between rounded">
+<div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase tracking-widest text-secondary font-semibold">Total Hazard Exposure Area</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-code-tabular text-[0.6875rem] font-bold">NOAH / MGB</span>
+</div>
+<div class="flex items-baseline gap-2 mt-space-md">
+<span class="font-display-figure text-display-figure text-on-surface">84.2%</span>
+<span class="font-body-md text-secondary">of land parcel</span>
+</div>
+<!-- Risk Breakdown Segments -->
+<div class="flex flex-col gap-space-md mt-space-lg">
+<div>
+<div class="flex justify-between font-label-caps text-label-caps text-secondary uppercase mb-1">
+<span>Flood &amp; Riverine Inundation</span>
+<span class="font-code-tabular text-tertiary font-bold">76.4%</span>
+</div>
+<div class="w-full h-2 rounded bg-surface-container overflow-hidden flex">
+<div class="h-full bg-tertiary-container rounded" style="width: 76.4%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-caps text-label-caps text-secondary uppercase mb-1">
+<span>Landslide &amp; Bank Scouring</span>
+<span class="font-code-tabular text-on-surface font-bold">18.2%</span>
+</div>
+<div class="w-full h-2 rounded bg-surface-container overflow-hidden flex">
+<div class="h-full bg-on-tertiary-container rounded" style="width: 18.2%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-caps text-label-caps text-secondary uppercase mb-1">
+<span>Typhoon Wind / Storm Surge Zone</span>
+<span class="font-code-tabular text-on-surface font-bold">91.0%</span>
+</div>
+<div class="w-full h-2 rounded bg-surface-container overflow-hidden flex">
+<div class="h-full bg-primary-container rounded" style="width: 91.0%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-space-md text-[0.6875rem] font-code-tabular text-secondary leading-normal">
+          Source: Project NOAH &amp; Mines and Geosciences Bureau (MGB) 1:10,000 Geospatial Multi-Hazard Matrix.
+        </div>
+</div>
+<!-- Metric Column 3: Infrastructure Spend -->
+<div class="p-space-lg bg-surface-container-lowest flex flex-col justify-between rounded">
+<div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase tracking-widest text-secondary font-semibold">Total Infra Disbursement (2018–2024)</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-code-tabular text-[0.6875rem] font-bold">DPWH-CAG-3RD</span>
+</div>
+<div class="flex items-baseline gap-2 mt-space-md">
+<span class="font-display-figure text-display-figure text-primary">₱1.84B</span>
+<span class="font-body-md text-secondary">total audited</span>
+</div>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-error-container text-on-error-container font-code-tabular text-code-tabular mt-space-sm font-semibold">
+<span>↓ 24.6%</span>
+<span class="font-normal text-[0.75rem]">vs. previous 3-year rolling average</span>
+</div>
+<div class="flex flex-col gap-2 mt-space-lg p-space-md rounded bg-surface-container-low font-body-sm">
+<div class="flex justify-between items-baseline">
+<span class="text-secondary">Locality Per-Capita Spend:</span>
+<span class="font-code-tabular font-bold text-on-surface">₱1,844 / citizen / yr</span>
+</div>
+<div class="flex justify-between items-baseline">
+<span class="text-secondary">High-Risk Basin Median:</span>
+<span class="font-code-tabular text-secondary font-semibold">₱7,920 / citizen / yr</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded overflow-hidden mt-1">
+<div class="bg-primary h-full" style="width: 23.2%"></div>
+</div>
+</div>
+</div>
+<div class="pt-space-md text-[0.6875rem] font-code-tabular text-secondary">
+          Aggregated across 24 national and sub-provincial civil contracts recorded in PhilGEPS.
+        </div>
+</div>
+</div>
+</section>
+<!-- Split View (60% Interactive Basin Map / 40% Project Ledger) -->
+<section class="w-full max-w-[1360px] mx-auto px-margin-desktop pb-space-2xl">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Left 60% Map Canvas -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded overflow-hidden flex flex-col">
+<!-- Map Control Subheader -->
+<div class="px-space-md py- space-sm bg-surface-container-low flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">map</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-on-surface font-bold">Hydrologic Risk &amp; Project Spatial Grid</span>
+</div>
+<div class="flex items-center gap-3 font-code-tabular text-[0.6875rem] text-secondary">
+<span>Lat: 17.6132° N</span>
+<span>Lng: 121.7270° E</span>
+<span class="text-primary font-bold">● LIVE VECTOR LAYER</span>
+</div>
+</div>
+<!-- Interactive Vector Map Box -->
+<div class="relative w-full h-[580px] bg-[#f4ede6] overflow-hidden select-none">
+<!-- Stylized Geographic SVG of Cagayan River, Pinacanauan Junction, and Barangays -->
+<svg class="w-full h-full" preserveaspectratio="xMidYMid meet" viewbox="0 0 700 520">
+<!-- Defs for hazard patterns -->
+<defs>
+<pattern height="8" id="floodStripes" patterntransform="rotate(45 0 0)" patternunits="userSpaceOnUse" width="8">
+<line opacity="0.18" stroke="#701d12" stroke-width="2" x1="0" x2="0" y1="0" y2="8"></line>
+</pattern>
+<pattern height="10" id="landslideDots" patternunits="userSpaceOnUse" width="10">
+<circle cx="2" cy="2" fill="#ba1a1a" opacity="0.3" r="1.5"></circle>
+</pattern>
+</defs>
+<!-- Background Locality Base Geometry -->
+<rect fill="#f8f2eb" height="520" width="700"></rect>
+<!-- Contour Elevation Fills -->
+<path d="M 50,0 Q 220,120 400,60 T 700,90 L 700,0 Z" fill="#eee6de" opacity="0.6"></path>
+<path d="M 0,380 Q 200,420 480,360 T 700,430 L 700,520 L 0,520 Z" fill="#eee6de" opacity="0.6"></path>
+<!-- Flood Inundation High-Hazard Polygons (Project NOAH modeled) -->
+<path d="M 120,40 C 230,100 240,240 280,340 C 310,410 420,470 510,500 L 390,520 L 190,480 C 130,380 90,260 70,160 Z" fill="#ffdad4" id="floodZone1" opacity="0.7"></path>
+<path d="M 120,40 C 230,100 240,240 280,340 C 310,410 420,470 510,500 L 390,520 L 190,480 C 130,380 90,260 70,160 Z" fill="url(#floodStripes)"></path>
+<!-- Secondary Riverine Basin Inundation Zone -->
+<polygon fill="#ffdad6" opacity="0.5" points="340,160 480,180 540,290 460,350 350,290"></polygon>
+<!-- Barangay Boundary Overlays -->
+<!-- Brgy Buntun -->
+<path d="M 80,240 L 220,230 L 250,330 L 130,370 Z" fill="none" stroke="#cec5bd" stroke-dasharray="3,3" stroke-width="1"></path>
+<text class="font-label-caps" fill="#635d57" font-size="9" letter-spacing="1" x="140" y="295">BRGY. BUNTUN</text>
+<!-- Brgy Centro (Poblacion) -->
+<path d="M 230,160 L 360,150 L 370,260 L 240,260 Z" fill="none" stroke="#cec5bd" stroke-dasharray="3,3" stroke-width="1"></path>
+<text class="font-label-caps" fill="#635d57" font-size="9" letter-spacing="1" x="260" y="210">POBLACION</text>
+<!-- Brgy Carig (Regional Gov Center) -->
+<path d="M 420,80 L 580,70 L 610,190 L 460,200 Z" fill="none" stroke="#cec5bd" stroke-dasharray="3,3" stroke-width="1"></path>
+<text class="font-label-caps" fill="#635d57" font-size="9" letter-spacing="1" x="490" y="140">CARIG SUR</text>
+<!-- Brgy Linao -->
+<path d="M 250,330 L 380,330 L 390,450 L 270,440 Z" fill="none" stroke="#cec5bd" stroke-dasharray="3,3" stroke-width="1"></path>
+<text class="font-label-caps" fill="#635d57" font-size="9" letter-spacing="1" x="290" y="380">BRGY. LINAO</text>
+<!-- Brgy Cataggaman -->
+<path d="M 90,380 L 240,360 L 230,490 L 110,470 Z" fill="none" stroke="#cec5bd" stroke-dasharray="3,3" stroke-width="1"></path>
+<text class="font-label-caps" fill="#635d57" font-size="9" letter-spacing="1" x="130" y="440">CATAGGAMAN</text>
+<!-- Major Waterways: Cagayan River and Pinacanauan River -->
+<!-- Pinacanauan River Tributary -->
+<path d="M 680,320 C 580,300 480,280 400,270 C 350,265 310,250 260,240" fill="none" opacity="0.8" stroke="#7daead" stroke-linecap="round" stroke-width="14"></path>
+<path d="M 680,320 C 580,300 480,280 400,270 C 350,265 310,250 260,240" fill="none" opacity="0.3" stroke="#002b2b" stroke-width="2"></path>
+<text fill="#002b2b" font-family="Newsreader" font-size="11" font-style="italic" opacity="0.75" x="500" y="270">Pinacanauan River</text>
+<!-- Cagayan River Main Meander Trunk -->
+<path d="M 120,0 C 140,80 160,140 210,210 C 250,260 270,300 290,390 C 310,450 370,490 460,520" fill="none" opacity="0.85" stroke="#7daead" stroke-linecap="square" stroke-width="28"></path>
+<path d="M 120,0 C 140,80 160,140 210,210 C 250,260 270,300 290,390 C 310,450 370,490 460,520" fill="none" opacity="0.4" stroke="#002b2b" stroke-dasharray="8,4" stroke-width="3"></path>
+<text fill="#002b2b" font-family="Newsreader" font-size="13" font-style="italic" font-weight="600" opacity="0.8" x="135" y="110">Cagayan River (Rio Grande)</text>
+<!-- Buntun Bridge Landmark Line -->
+<line stroke="#1d1b18" stroke-width="4" x1="175" x2="225" y1="260" y2="280"></line>
+<text fill="#1d1b18" font-family="Inter" font-size="8" font-weight="700" x="145" y="250">BUNTUN BRIDGE</text>
+<!-- Project Vector Markers (Dots color coded by status) -->
+<!-- Project 1: Cagayan River Basin Dike Phase 3 (Brgy Buntun) - AMBER (Delayed) -->
+<g class="cursor-pointer group" onclick="highlightProject('proj-1')">
+<circle cx="215" cy="275" fill="#ffdad6" opacity="0.6" r="14"></circle>
+<circle cx="215" cy="275" fill="#ba1a1a" r="7"></circle>
+<circle cx="215" cy="275" fill="#ffffff" r="3"></circle>
+</g>
+<!-- Project 2: Rehabilitation of Pinacanauan River Dike (Brgy Linao) - RED (Stalled) -->
+<g class="cursor-pointer group" onclick="highlightProject('proj-2')">
+<circle cx="330" cy="360" fill="#ffdad6" opacity="0.6" r="14"></circle>
+<circle cx="330" cy="360" fill="#510501" r="7"></circle>
+<circle cx="330" cy="360" fill="#ffffff" r="3"></circle>
+</g>
+<!-- Project 3: Drainage Mains Poblacion Phase II - GREEN (Completed) -->
+<g class="cursor-pointer group" onclick="highlightProject('proj-3')">
+<circle cx="295" cy="225" fill="#002b2b" r="6"></circle>
+<circle cx="295" cy="225" fill="#ffffff" r="2.5"></circle>
+</g>
+<!-- Project 4: Reconstruction Buntun-Annafunan Spillway - TEAL (Ongoing On-Track) -->
+<g class="cursor-pointer group" onclick="highlightProject('proj-4')">
+<circle cx="170" cy="320" fill="#366666" r="7"></circle>
+<circle cx="170" cy="320" fill="#ffffff" r="3"></circle>
+</g>
+<!-- Additional Contextual DPWH Projects -->
+<circle cx="480" cy="160" fill="#002b2b" opacity="0.8" r="5"></circle>
+<circle cx="510" cy="180" fill="#ba1a1a" opacity="0.8" r="5"></circle>
+<circle cx="360" cy="290" fill="#366666" opacity="0.8" r="5"></circle>
+<circle cx="220" cy="410" fill="#510501" opacity="0.8" r="5"></circle>
+</svg>
+<!-- Floating Interactive Layer Selector Palette -->
+<div class="absolute top-4 left-4 bg-surface-container-lowest p-space-sm rounded max-w-[210px] space-y-2 text-on-surface">
+<span class="font-label-caps text-[0.625rem] font-bold text-secondary uppercase tracking-wider block">Active GIS Layers</span>
+<label class="flex items-center gap-2 cursor-pointer font-body-sm text-[0.75rem]">
+<input checked="" class="accent-primary rounded" type="checkbox"/>
+<span>Flood Inundation (NOAH)</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer font-body-sm text-[0.75rem]">
+<input checked="" class="accent-primary rounded" type="checkbox"/>
+<span>Riverbank Scouring</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer font-body-sm text-[0.75rem]">
+<input checked="" class="accent-primary rounded" type="checkbox"/>
+<span>DPWH Projects (24)</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer font-body-sm text-[0.75rem] text-secondary">
+<input class="accent-primary rounded" type="checkbox"/>
+<span>Storm Surge Corridors</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer font-body-sm text-[0.75rem]">
+<input checked="" class="accent-primary rounded" type="checkbox"/>
+<span>Barangay Boundaries</span>
+</label>
+</div>
+<!-- Selected Project Callout Overlay Pin (Buntun Project Callout) -->
+<div class="absolute bottom-4 right-4 bg-surface-container-lowest p-space-md rounded max-w-[290px]">
+<div class="flex items-center justify-between gap-2 mb-1">
+<span class="px-1.5 py-0.5 rounded bg-error-container text-tertiary font-code-tabular text-[0.625rem] font-bold uppercase">Contract #DPWH-21-0089</span>
+<span class="font-code-tabular text-[0.6875rem] text-error font-bold">184d Delayed</span>
+</div>
+<div class="font-headline-sm text-body-md font-bold text-on-surface leading-snug">Cagayan River Basin Dike Phase 3</div>
+<div class="font-code-tabular text-body-sm text-secondary mt-1">Brgy. Buntun Access Road</div>
+<div class="flex items-center justify-between mt-2 pt-2 text-on-surface">
+<span class="font-label-caps text-label-caps uppercase text-secondary">Budget</span>
+<span class="font-code-tabular text-body-sm font-bold">₱142,500,000</span>
+</div>
+</div>
+</div>
+<!-- Map Footer Legend -->
+<div class="px-space-md py- space-sm bg-surface-container-lowest flex flex-wrap items-center justify-between text-[0.6875rem] font-code-tabular text-secondary">
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#002b2b]"></span> Completed</span>
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#366666]"></span> On Track</span>
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#ba1a1a]"></span> Delayed</span>
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#510501]"></span> Stalled / COA Suspension</span>
+</div>
+<span>Showing 24 Geocoded Contracts</span>
+</div>
+</div>
+<!-- Right 40% Scrollable Project Ledger -->
+<div class="lg:col-span-5 flex flex-col bg-surface-container-lowest rounded overflow-hidden">
+<!-- Ledger Header and Categorical Tabs -->
+<div class="p-space-md bg-surface-container-low flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Tracked Infrastructure Ledger</span>
+<span class="font-label-caps text-[0.625rem] text-secondary uppercase tracking-wider">24 Tracked DPWH &amp; LGU Flood/Civic Works</span>
+</div>
+<button class="text-primary hover:text-primary-container font-label-caps text-label-caps uppercase font-bold flex items-center gap-1" type="button">
+              Filter <span class="material-symbols-outlined text-[14px]">tune</span>
+</button>
+</div>
+<!-- Category Chips -->
+<div class="flex items-center gap-1.5 overflow-x-auto py-1">
+<button class="px-2.5 py-1 rounded bg-primary text-on-primary font-label-caps text-[0.6875rem] uppercase font-bold tracking-wider shrink-0">All (24)</button>
+<button class="px-2.5 py-1 rounded bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-caps text-[0.6875rem] uppercase font-medium tracking-wider shrink-0">Flood Control (14)</button>
+<button class="px-2.5 py-1 rounded bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-caps text-[0.6875rem] uppercase font-medium tracking-wider shrink-0">Roads &amp; Bridges (7)</button>
+<button class="px-2.5 py-1 rounded bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-caps text-[0.6875rem] uppercase font-medium tracking-wider shrink-0">Civic Buildings (3)</button>
+</div>
+</div>
+<!-- Scrollable Project Stack -->
+<div class="divide-y divide-surface-container max-h-[580px] overflow-y-auto">
+<!-- Contract Row 1 -->
+<div class="p-space-md hover:bg-surface-container-low transition-colors flex flex-col gap-2" id="proj-1">
+<div class="flex items-start justify-between gap-2">
+<span class="font-code-tabular text-[0.6875rem] text-secondary font-medium">CW-CAG-2021-042 · DPWH R02</span>
+<span class="px-2 py-0.5 rounded bg-error-container text-on-error-container font-label-caps text-[0.625rem] font-bold uppercase">
+                Delayed 184 Days
+              </span>
+</div>
+<div class="font-headline-sm text-body-md font-semibold text-on-surface leading-snug">
+              Construction of Flood Mitigation Structure along Cagayan River, Brgy. Buntun
+            </div>
+<div class="flex items-center justify-between text-body-sm font-code-tabular text-on-surface-variant">
+<span>Contractor: <strong class="text-on-surface font-semibold">Alpha &amp; Omega Gen. Contractor</strong></span>
+<span class="text-primary font-bold text-body-md">₱142,500,000</span>
+</div>
+<!-- Progress Metric Bar -->
+<div class="flex flex-col gap-1 mt-1">
+<div class="flex justify-between font-code-tabular text-[0.6875rem] text-secondary">
+<span>Disbursement Physical Execution</span>
+<span class="font-bold text-on-surface">42.0%</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded overflow-hidden">
+<div class="bg-error h-full" style="width: 42%"></div>
+</div>
+</div>
+<div class="text-[0.6875rem] font-body-sm text-secondary italic">
+              Target completion: Dec 2023. Site halted due to unliquidated cash advances noted in COA Notice of Suspension.
+            </div>
+</div>
+<!-- Contract Row 2 -->
+<div class="p-space-md hover:bg-surface-container-low transition-colors flex flex-col gap-2 bg-surface-container-low/40" id="proj-2">
+<div class="flex items-start justify-between gap-2">
+<span class="font-code-tabular text-[0.6875rem] text-secondary font-medium">CW-CAG-2022-019 · DPWH R02</span>
+<span class="px-2 py-0.5 rounded bg-tertiary text-on-tertiary font-label-caps text-[0.625rem] font-bold uppercase tracking-wider">
+                Stalled (COA Audit Flag)
+              </span>
+</div>
+<div class="font-headline-sm text-body-md font-semibold text-tertiary leading-snug">
+              Rehabilitation of Pinacanauan River Dike and Revetment Wall, Brgy. Linao
+            </div>
+<div class="flex items-center justify-between text-body-sm font-code-tabular text-on-surface-variant">
+<span>Contractor: <strong class="text-on-surface font-semibold">Northern Builders Inc.</strong></span>
+<span class="text-tertiary font-bold text-body-md">₱88,400,000</span>
+</div>
+<!-- Progress Metric Bar -->
+<div class="flex flex-col gap-1 mt-1">
+<div class="flex justify-between font-code-tabular text-[0.6875rem] text-secondary">
+<span>Disbursement Physical Execution</span>
+<span class="font-bold text-tertiary">15.0%</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded overflow-hidden">
+<div class="bg-tertiary h-full" style="width: 15%"></div>
+</div>
+</div>
+<div class="text-[0.6875rem] font-body-sm text-tertiary font-medium">
+              COA Notice of Disallowance issued for substandard rock rip-rap specifications failing hydraulic flow test.
+            </div>
+</div>
+<!-- Contract Row 3 -->
+<div class="p-space-md hover:bg-surface-container-low transition-colors flex flex-col gap-2" id="proj-3">
+<div class="flex items-start justify-between gap-2">
+<span class="font-code-tabular text-[0.6875rem] text-secondary font-medium">CW-CAG-2023-088 · LGU-TUG</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-primary font-label-caps text-[0.625rem] font-bold uppercase tracking-wider">
+                Completed (Dec 2023)
+              </span>
+</div>
+<div class="font-headline-sm text-body-md font-semibold text-on-surface leading-snug">
+              Drainage Mains and Outfall System, Tuguegarao Poblacion Phase II
+            </div>
+<div class="flex items-center justify-between text-body-sm font-code-tabular text-on-surface-variant">
+<span>Contractor: <strong class="text-on-surface font-semibold">Triple-A Intercontinental Infra</strong></span>
+<span class="text-on-surface font-bold text-body-md">₱64,200,000</span>
+</div>
+<!-- Progress Metric Bar -->
+<div class="flex flex-col gap-1 mt-1">
+<div class="flex justify-between font-code-tabular text-[0.6875rem] text-secondary">
+<span>Disbursement Physical Execution</span>
+<span class="font-bold text-primary">100.0%</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded overflow-hidden">
+<div class="bg-primary h-full" style="width: 100%"></div>
+</div>
+</div>
+<div class="text-[0.6875rem] font-body-sm text-secondary">
+              Fully commissioned. Verified by City Engineering Office during Typhoon Egay post-event review.
+            </div>
+</div>
+<!-- Contract Row 4 -->
+<div class="p-space-md hover:bg-surface-container-low transition-colors flex flex-col gap-2" id="proj-4">
+<div class="flex items-start justify-between gap-2">
+<span class="font-code-tabular text-[0.6875rem] text-secondary font-medium">CW-CAG-2023-104 · DPWH Central</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-caps text-[0.625rem] font-bold uppercase tracking-wider">
+                Ongoing (On Schedule)
+              </span>
+</div>
+<div class="font-headline-sm text-body-md font-semibold text-on-surface leading-snug">
+              Reconstruction of Buntun-Annafunan Spillway Access Causeway
+            </div>
+<div class="flex items-center justify-between text-body-sm font-code-tabular text-on-surface-variant">
+<span>Contractor: <strong class="text-on-surface font-semibold">Cagayan Valley Consolidated</strong></span>
+<span class="text-on-surface font-bold text-body-md">₱112,000,000</span>
+</div>
+<!-- Progress Metric Bar -->
+<div class="flex flex-col gap-1 mt-1">
+<div class="flex justify-between font-code-tabular text-[0.6875rem] text-secondary">
+<span>Disbursement Physical Execution</span>
+<span class="font-bold text-on-surface">68.0%</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded overflow-hidden">
+<div class="bg-primary-container h-full" style="width: 68%"></div>
+</div>
+</div>
+<div class="text-[0.6875rem] font-body-sm text-secondary">
+              Expected turnover: Q2 2025. Culvert reinforcing on track without recorded variations.
+            </div>
+</div>
+</div>
+<div class="p-space-sm bg-surface-container-low text-center">
+<a class="font-label-caps text-label-caps uppercase text-primary font-bold hover:underline" href="#">
+            View All 24 Contracts in Registry Ledger →
+          </a>
+</div>
+</div>
+</div>
+</section>
+<!-- Below The Split: Annual Spend vs Disaster Benchmark Timeline -->
+<section class="w-full max-w-[1360px] mx-auto px-margin-desktop pb-space-2xl">
+<div class="bg-surface-container-lowest p-space-xl rounded flex flex-col gap-space-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div>
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary font-semibold">Historical Expenditure Trajectory</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-semibold">Annual Infrastructure Spend vs. Catastrophic Events (2018–2024)</h2>
+<p class="font-body-md text-secondary mt-1">Comparing public spending allocations against verified river crest flooding events in the Lower Cagayan Basin.</p>
+</div>
+<div class="flex items-center gap-4 text-body-sm font-code-tabular text-secondary">
+<span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-primary rounded-sm"></span> DPWH National &amp; LGU Spend</span>
+<span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-tertiary-container rounded-sm"></span> Disaster Crest Marker</span>
+</div>
+</div>
+<!-- Custom Pure CSS/HTML Timeline Chart -->
+<div class="pt-space-md flex flex-col gap-6">
+<!-- Bars Grid -->
+<div class="grid grid-cols-7 gap-3 sm:gap-6 items-end h-64 pb-2">
+<!-- 2018 -->
+<div class="flex flex-col items-center gap-2 h-full justify-end">
+<span class="font-code-tabular text-[0.75rem] font-semibold text-on-surface">₱210M</span>
+<div class="w-full max-w-[56px] bg-surface-container hover:bg-primary-container transition-colors rounded-t" style="height: 41%;"></div>
+<span class="font-code-tabular text-[0.75rem] text-secondary">2018</span>
+</div>
+<!-- 2019 -->
+<div class="flex flex-col items-center gap-2 h-full justify-end">
+<span class="font-code-tabular text-[0.75rem] font-semibold text-on-surface">₱340M</span>
+<div class="w-full max-w-[56px] bg-surface-container hover:bg-primary-container transition-colors rounded-t" style="height: 66%;"></div>
+<span class="font-code-tabular text-[0.75rem] text-secondary">2019</span>
+</div>
+<!-- 2020: Typhoon Ulysses Aftermath -->
+<div class="relative flex flex-col items-center gap-2 h-full justify-end">
+<!-- Event Callout Tag -->
+<div class="absolute -top-12 z-10 flex flex-col items-center pointer-events-none">
+<span class="px-1.5 py-0.5 rounded bg-tertiary text-on-tertiary font-label-caps text-[0.5625rem] font-bold uppercase whitespace-nowrap">
+                Nov 2020: Ulysses (15.3m River Crest)
+              </span>
+<div class="w-0.5 h-3 bg-tertiary"></div>
+</div>
+<span class="font-code-tabular text-[0.75rem] font-bold text-tertiary">₱510M</span>
+<div class="w-full max-w-[56px] bg-primary transition-colors rounded-t" style="height: 100%;"></div>
+<span class="font-code-tabular text-[0.75rem] font-bold text-on-surface">2020</span>
+</div>
+<!-- 2021 -->
+<div class="flex flex-col items-center gap-2 h-full justify-end">
+<span class="font-code-tabular text-[0.75rem] font-semibold text-on-surface">₱310M</span>
+<div class="w-full max-w-[56px] bg-surface-container hover:bg-primary-container transition-colors rounded-t" style="height: 60%;"></div>
+<span class="font-code-tabular text-[0.75rem] text-secondary">2021</span>
+</div>
+<!-- 2022 -->
+<div class="flex flex-col items-center gap-2 h-full justify-end">
+<span class="font-code-tabular text-[0.75rem] font-semibold text-on-surface">₱220M</span>
+<div class="w-full max-w-[56px] bg-surface-container hover:bg-primary-container transition-colors rounded-t" style="height: 43%;"></div>
+<span class="font-code-tabular text-[0.75rem] text-secondary">2022</span>
+</div>
+<!-- 2023 -->
+<div class="flex flex-col items-center gap-2 h-full justify-end">
+<span class="font-code-tabular text-[0.75rem] font-semibold text-on-surface">₱130M</span>
+<div class="w-full max-w-[56px] bg-surface-container hover:bg-primary-container transition-colors rounded-t" style="height: 25%;"></div>
+<span class="font-code-tabular text-[0.75rem] text-secondary">2023</span>
+</div>
+<!-- 2024 YTD: Typhoon Marce / Nika -->
+<div class="relative flex flex-col items-center gap-2 h-full justify-end">
+<!-- Event Callout Tag -->
+<div class="absolute -top-12 z-10 flex flex-col items-center pointer-events-none">
+<span class="px-1.5 py-0.5 rounded bg-tertiary-container text-on-tertiary font-label-caps text-[0.5625rem] font-bold uppercase whitespace-nowrap">
+                Nov 2024: Marce &amp; Nika Inundation
+              </span>
+<div class="w-0.5 h-3 bg-tertiary-container"></div>
+</div>
+<span class="font-code-tabular text-[0.75rem] font-bold text-error">₱120M YTD</span>
+<div class="w-full max-w-[56px] bg-error-container hover:bg-tertiary transition-colors rounded-t" style="height: 23%;"></div>
+<span class="font-code-tabular text-[0.75rem] font-bold text-on-surface">2024</span>
+</div>
+</div>
+<div class="p-space-md rounded bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-body-sm text-secondary">
+<p class="leading-relaxed">
+<strong class="text-on-surface font-semibold">Post-Disaster Allocation Cliff:</strong> Capital allocations spiked sharply in 2020 following Typhoon Ulysses, followed by a continuous 76.4% reduction in capital expenditure through 2024, despite recurring submersions.
+          </p>
+<span class="font-code-tabular text-[0.75rem] text-primary whitespace-nowrap font-semibold">DBM GAA NEP Archive Verified</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Public Accountability Strip: "Who Represents This Area" -->
+<section class="w-full max-w-[1360px] mx-auto px-margin-desktop pb-space-2xl">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div>
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary font-semibold">Elected Governance &amp; Appropriations Oversight</span>
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold">Current Jurisdiction Representation (2022–2025)</h2>
+</div>
+<span class="font-code-tabular text-[0.75rem] text-secondary">Cross-referenced with COMELEC &amp; House Records</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Official Card 1: District Representative -->
+<div class="bg-surface-container-lowest p-space-lg rounded flex flex-col justify-between">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase tracking-widest text-secondary font-bold">Legislative Branch</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-code-tabular text-[0.625rem]">Term: 2019–2025</span>
+</div>
+<div class="flex flex-col mt-1">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Rep. Joseph L. Antonio</span>
+<span class="font-body-sm text-primary font-medium">Representative, 3rd District of Cagayan</span>
+<span class="font-code-tabular text-[0.6875rem] text-secondary mt-0.5">Party: Lakas-CMD / Majority Bloc</span>
+</div>
+<div class="mt-space-md pt-space-sm space-y-1.5 font-body-sm text-[0.8125rem]">
+<div class="text-secondary font-medium font-label-caps text-[0.625rem] uppercase tracking-wider">Committee Allocations:</div>
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-primary">account_balance</span>
+<span>House Committee on Appropriations</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-primary">construction</span>
+<span>Committee on Public Works &amp; Highways</span>
+</div>
+</div>
+</div>
+<div class="mt-space-lg pt-space-sm flex items-center justify-between font-code-tabular text-[0.75rem]">
+<span class="text-secondary">DPWH District SARO Sponsored:</span>
+<span class="font-bold text-on-surface">₱1.24B</span>
+</div>
+</div>
+<!-- Official Card 2: City Mayor -->
+<div class="bg-surface-container-lowest p-space-lg rounded flex flex-col justify-between">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase tracking-widest text-secondary font-bold">City Executive</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-code-tabular text-[0.625rem]">Term: 2022–2025</span>
+</div>
+<div class="flex flex-col mt-1">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Mayor Maila Ting-Que</span>
+<span class="font-body-sm text-primary font-medium">City Mayor, Tuguegarao City</span>
+<span class="font-code-tabular text-[0.6875rem] text-secondary mt-0.5">Local Government Unit / Component City</span>
+</div>
+<div class="mt-space-md pt-space-sm space-y-1.5 font-body-sm text-[0.8125rem]">
+<div class="text-secondary font-medium font-label-caps text-[0.625rem] uppercase tracking-wider">Executive Directives:</div>
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-primary">water_damage</span>
+<span>Chairperson, City DRRM Council</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-primary">gavel</span>
+<span>Head of Procuring Entity (HOPE)</span>
+</div>
+</div>
+</div>
+<div class="mt-space-lg pt-space-sm flex items-center justify-between font-code-tabular text-[0.75rem]">
+<span class="text-secondary">LGU Calamity Fund Utilization:</span>
+<span class="font-bold text-on-surface">₱146.8M / yr</span>
+</div>
+</div>
+<!-- Official Card 3: Provincial Governor -->
+<div class="bg-surface-container-lowest p-space-lg rounded flex flex-col justify-between">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase tracking-widest text-secondary font-bold">Provincial Executive</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-code-tabular text-[0.625rem]">Term: 2016–2025</span>
+</div>
+<div class="flex flex-col mt-1">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Gov. Manuel N. Mamba</span>
+<span class="font-body-sm text-primary font-medium">Provincial Governor, Cagayan Province</span>
+<span class="font-code-tabular text-[0.6875rem] text-secondary mt-0.5">Capitol Complex, Peñablanca / Tuguegarao</span>
+</div>
+<div class="mt-space-md pt-space-sm space-y-1.5 font-body-sm text-[0.8125rem]">
+<div class="text-secondary font-medium font-label-caps text-[0.625rem] uppercase tracking-wider">Inter-Agency Portfolios:</div>
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-primary">nature</span>
+<span>Cagayan River Basin Management Council</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-primary">security</span>
+<span>Regional Peace &amp; Order Council R02</span>
+</div>
+</div>
+</div>
+<div class="mt-space-lg pt-space-sm flex items-center justify-between font-code-tabular text-[0.75rem]">
+<span class="text-secondary">Provincial Dredging Overseeing:</span>
+<span class="font-bold text-on-surface">₱450.0M Total</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<script>
+  function highlightProject(projectId) {
+    const el = document.getElementById(projectId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('bg-surface-container');
+      setTimeout(() => {
+        el.classList.remove('bg-surface-container');
+      }, 1500);
+    }
+  }
+</script></main><footer class="w-full bg-surface-container-low border-t border-outline-variant/70"><div class="max-w-[1440px] mx-auto px-margin-desktop py-space-2xl"><div class="grid grid-cols-1 md:grid-cols-12 gap-space-xl border-b border-outline-variant/50 pb-space-2xl"><div class="md:col-span-5 flex flex-col gap-space-md"><div class="flex items-center gap-space-sm"><img alt="Bantay Pondo Brand Emblem" class="h-7 w-auto object-contain grayscale opacity-85" src="https://lh3.googleusercontent.com/aida/AEtjO1Xi8vTqLq-v1Sk3ayJYzTjRJDlgGd2K7KYnmB6jToq_i0lGjgvt3OidTOx2hgDrPoxCNOuSBhp2J53R7jpu8Px6wZtmuIijkMt-gPaYWj2pcovySDQTAipIlV5fUikZqrbExLeHvhoBCUsjQdx9IlZneZ3N4p2xQCKH-PDlZH1M4fvKG6lZGvit8MxQ3fZCDqHJrZP4utp92VKk_w5DVP2ff9dSb4TjD2vN_E6fp6TmKws1WZry19WZ3kM"/><span class="font-headline-sm text-headline-sm text-primary font-bold">Bantay Pondo</span></div><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">An independent public-interest civic data project tracking Philippine government infrastructure allocations, contractor accountability, and hazard-zone public spending fidelity.</p><div class="p-space-md rounded bg-surface-container-lowest border border-outline-variant/80 font-body-sm text-body-sm text-on-surface-variant"><strong class="text-on-surface font-semibold block mb-1 font-label-caps text-label-caps uppercase">Editorial Notice &amp; Scope</strong>Bantay Pondo is an independent public interest data repository. Absence of recorded project spend in high-risk zones indicates potential audit blind spots or reporting delays, not absence of vulnerability.</div></div><div class="md:col-span-3 flex flex-col gap-space-sm"><span class="font-label-caps text-label-caps uppercase text-secondary font-bold tracking-wider">Data Sources &amp; Ingestion</span><ul class="space-y-2 font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors underline decoration-outline-variant/60 underline-offset-4" href="#">DPWH Transparency Portal</a></li><li><a class="hover:text-primary transition-colors underline decoration-outline-variant/60 underline-offset-4" href="#">PhilGEPS Contract Registers</a></li><li><a class="hover:text-primary transition-colors underline decoration-outline-variant/60 underline-offset-4" href="#">COA Annual Audit Reports (AAR)</a></li><li><a class="hover:text-primary transition-colors underline decoration-outline-variant/60 underline-offset-4" href="#">NOAH / PAGASA / MGB Hazard Maps</a></li><li><a class="hover:text-primary transition-colors underline decoration-outline-variant/60 underline-offset-4" href="#">DBM National Expenditure Program</a></li></ul></div><div class="md:col-span-2 flex flex-col gap-space-sm"><span class="font-label-caps text-label-caps uppercase text-secondary font-bold tracking-wider">Investigations</span><ul class="space-y-2 font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" href="#">Flood Control Audits</a></li><li><a class="hover:text-primary transition-colors" href="#">Barangay-Level Disparities</a></li><li><a class="hover:text-primary transition-colors" href="#">Ghost Projects Database</a></li><li><a class="hover:text-primary transition-colors" href="#">Top 100 Contractors</a></li><li><a class="hover:text-primary transition-colors" href="#">Red-Flag Risk Models</a></li></ul></div><div class="md:col-span-2 flex flex-col gap-space-sm"><span class="font-label-caps text-label-caps uppercase text-secondary font-bold tracking-wider">Civic Access</span><ul class="space-y-2 font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" href="#">Freedom of Information (FOI) API</a></li><li><a class="hover:text-primary transition-colors" href="#">Open Data Philippines Export</a></li><li><a class="hover:text-primary transition-colors" href="#">Research Methodology</a></li><li><a class="hover:text-primary transition-colors" href="#">GitHub Repository</a></li><li><a class="hover:text-primary transition-colors" href="#">Whistleblower Channel</a></li></ul></div></div><div class="pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm text-secondary"><p class="font-code-tabular text-code-tabular text-secondary">© 2024 Bantay Pondo Initiative. Released under Creative Commons Attribution 4.0 International (CC BY 4.0).</p><div class="flex items-center gap-space-lg font-label-caps text-label-caps uppercase tracking-wider"><a class="hover:text-on-surface transition-colors" href="#">Privacy &amp; Terms</a><a class="hover:text-on-surface transition-colors" href="#">Audit Log</a><a class="hover:text-on-surface transition-colors" href="#">Contact Newsroom</a></div></div></div></footer></body></html>

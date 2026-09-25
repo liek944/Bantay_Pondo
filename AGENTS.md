@@ -20,11 +20,22 @@ message, the files win — flag the conflict and stop.
 
 ## Definition of done for a milestone
 
+### Backend (Milestones 1–9)
+
 1. `ruff check` and `mypy --strict` pass on /pipeline and /api
 2. `pytest` passes, including new tests for this milestone
 3. Row-count assertions hold on the fixture dataset
 4. PROGRESS.md updated
 5. Committed on branch `milestone/NN-name` with a descriptive message
+
+### Frontend (Milestones 10–14 / Phases 0–4)
+
+1. `tsc --noEmit`, `eslint`, and `prettier --check` pass with 0 errors
+2. `vitest run` passes, including new tests for this milestone
+3. Zero raw hex colors in `/src` (only semantic Tailwind tokens)
+4. Contract & fixture assertions hold against SPEC.md schemas
+5. PROGRESS.md updated
+6. Committed on branch `milestone/NN-frontend-<name>` with a descriptive message
 
 ## Do not
 
