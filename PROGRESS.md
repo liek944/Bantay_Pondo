@@ -25,10 +25,11 @@ Project tracking across backend and frontend sequential delivery milestones spec
 | Milestone / Phase | Description | Status | Branch | Tests |
 |:---:|---|:---:|---|:---:|
 | **10 / Phase 0** | **Discovery (Stitch export inspection & report)** | **COMPLETED** | `milestone/10-frontend-discovery` | Report verified |
-| 11 / Phase 1 | Scaffold Vite + React + TS & faithful port | Pending | `milestone/11-frontend-scaffold-port` | — |
+| **11 / Phase 1** | **Scaffold Vite + React + TS & faithful port** | **COMPLETED** | `milestone/11-frontend-scaffold-port` | 13 passing |
 | 12 / Phase 2 | Mock data layer (Zod schemas, MSW, fixtures) | Pending | `milestone/12-frontend-mock-data` | — |
 | 13 / Phase 3 | Feature implementation (Search, Dashboards, MapLibre, Compare) | Pending | `milestone/13-frontend-make-it-work` | — |
 | 14 / Phase 4 | Quality gates (Mobile responsive 375px, a11y, vitest, README) | Pending | `milestone/14-frontend-quality-gates` | — |
+
 
 ---
 
@@ -107,3 +108,70 @@ Project tracking across backend and frontend sequential delivery milestones spec
 - [x] Shared markup blocks mapped to reusable components.
 - [x] `PROGRESS.md` updated.
 - [x] Discovery report generated and execution paused for user go-ahead.
+
+---
+
+## Milestone 11 / Phase 1 Details: Scaffold Vite + React + TS & Faithful Port
+
+- **Status**: Complete
+- **Branch**: `milestone/11-frontend-scaffold-port`
+- **Completed On**: 2026-09-26
+- **Test Results**: 13 passed (across 3 test suites: components, routes, no-raw-hex)
+
+### Deliverables:
+1. **Target Stack In Place**:
+   - Scaffolded Vite + React 18 + TypeScript (strict mode enabled with `"noUnusedLocals"`, `"noUnusedParameters"`, `"strict"`).
+   - Tailwind CSS installed locally with PostCSS and Autoprefixer (no CDN scripts).
+   - React Router v6 configuring all 6 target routes.
+   - TanStack Query v5 integrated with QueryClientProvider.
+   - MapLibre GL JS and Lucide React installed.
+   - `@fontsource/newsreader` and `@fontsource/inter` installed and self-hosted (zero Google Fonts CDN links).
+   - Moved all original HTML exports and screenshots to `/design-reference/` for side-by-side verification.
+   - Preserved all exported visual assets in `/public/assets` with original and descriptive filenames.
+
+2. **Semantic Design Token Extraction (`tailwind.config.ts`)**:
+   - Named semantic color tokens: `canvas`, `surface`, `hairline`, `ink`, `ink-muted`, `accent`.
+   - Five-tier diagnostic data scale: `risk.100` (sand ochre), `risk.300` (regulatory amber), `risk.500` (investigative rust), `risk.700` (civic maroon), `risk.900` (deepest maroon).
+   - Exact Stitch compatibility tokens: `primary`, `secondary`, `tertiary`, `surface-container-*`, `outline-variant`.
+   - Typography tokens matching broadsheet specifications: `Newsreader` (display figures and headlines) and `Inter` (system interface and tabular lining numerals).
+   - **Enforced Zero Raw Hex Values**: Automated test `src/test/no-raw-hex.test.ts` scanning `/src` confirms 0 raw hex literals exist in any source file.
+
+3. **Reusable Components Extracted (`src/components/`)**:
+   - `Header`: Live registry feed ticker, brand emblem mark, route navigation, quick search trigger (`⌘K`), audit CSV action, user profile.
+   - `Footer`: Mission statement, editorial scope notice, data sources & ingestion links, investigations, civic access, and CC BY 4.0 license attribution.
+   - `SearchInput`: Typeahead registry search with clear trigger, ESC badge, and scope chips (`All Localities`, `Critical Anomaly`, `High Inundation`, `Flood Hotspots`).
+   - `StatBlock`: Kicker category, large display figure in `Newsreader`, subtext with risk-spectrum semantic highlighting.
+   - `RiskBadge`: 4-tier diagnostic risk badge with animated indicators (`low`, `moderate`, `high`, `critical`).
+   - `MismatchScale`: 4-segment visual spectrum displaying mismatch score (0-100) and national percentile.
+   - `HazardBars`: NOAH 100-year flood inundation, MGB landslide, and storm surge exposure breakdown.
+   - `OfficialStrip`: Political leadership accountability cards for Representative, City Mayor, and Provincial Governor.
+   - `Breadcrumb`: Accessible broadsheet trail with chevron dividers.
+   - `DataTable`: Generic high-density tabular data ledger with sticky headers and right-aligned lining numerals.
+   - `ProjectRow` / `ProjectList`: DPWH infrastructure contracts table with progress bars, COA flag markers, and contractor links.
+   - `FlagCallout`: Critical, high, and moderate COA audit observation callouts.
+   - `MapPanel` / `LayerToggle`: Topographic vector map viewport with layer toggles (NOAH Flood, MGB Landslide, DPWH Projects, Per-Capita Heatmap), zoom controls, and risk legend.
+   - `CompareColumn`: Comparative municipality dossier column for side-by-side audit benchmarking.
+   - `EvidenceCard`: Notarized on-site inspection photo card with timestamp, GPS coordinates, and SHA-256 hash.
+   - `SkeletonRow`: Editorial breathing tone loading state.
+   - `EmptyState`: Zero-result search dossier card with query reset action.
+
+4. **Complete Route Switchboard (`src/pages/`)**:
+   - `/`: `NationalMapSearch` (Landing, mission hero, interactive map drawer, quarterly audit rankings).
+   - `/locality/:psgcCode`: `LocalityDossier` (Tuguegarao City audit profile, NOAH hazard breakdown, leadership strip, flood control projects ledger).
+   - `/project/:contractId`: `ProjectDetail` (Contract 22BC0045, procurement details, negative slippage alert, field evidence photos, COA observations).
+   - `/contractor/:id`: `ContractorDossier` (Alpha & Omega profile, district concentration HHI 0.428, single-bidder patterns, awards ledger).
+   - `/compare`: `CompareLocalities` (Side-by-side comparison between Tuguegarao City and Masantol with swap control and disparity findings).
+   - `/methodology`: `MethodologyEvidence` (Cryptographic whistleblower vault, PGP encryption intake form, chain of custody standard).
+
+### Definition of Done Checklist:
+- [x] `tsc --noEmit` passes with 0 errors (strict mode enabled).
+- [x] `eslint` passes with 0 errors and 0 warnings.
+- [x] `prettier --check` passes with 0 errors.
+- [x] `vitest run` passes with 13 passing tests.
+- [x] Zero raw hex colors in `/src` (verified by automated test).
+- [x] Original HTML exports moved to `/design-reference/` for side-by-side verification.
+- [x] Google Fonts self-hosted via `@fontsource` with zero CDN links.
+- [x] Production bundle verified via `npm run build`.
+- [x] `PROGRESS.md` updated.
+- [x] Ready to commit on branch `milestone/11-frontend-scaffold-port`.
+

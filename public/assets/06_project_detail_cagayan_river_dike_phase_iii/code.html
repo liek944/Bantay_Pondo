@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "error": "#ba1a1a",
+        "surface-dim": "#dfd9d4",
+        "on-error-container": "#93000a",
+        "tertiary": "#510501",
+        "primary-fixed": "#b9eceb",
+        "on-background": "#1d1b18",
+        "on-error": "#ffffff",
+        "inverse-on-surface": "#f6f0ea",
+        "on-primary": "#ffffff",
+        "surface-container": "#f3ede7",
+        "on-secondary": "#ffffff",
+        "on-tertiary-fixed-variant": "#80281c",
+        "on-primary-container": "#7daead",
+        "surface-container-lowest": "#ffffff",
+        "primary-fixed-dim": "#9ed0cf",
+        "secondary-fixed": "#eae1d8",
+        "surface-bright": "#fff8f3",
+        "surface-container-highest": "#e8e1dc",
+        "surface-container-low": "#f9f2ed",
+        "on-secondary-fixed": "#1f1b16",
+        "on-tertiary": "#ffffff",
+        "background": "#fff8f3",
+        "on-surface": "#1d1b18",
+        "inverse-primary": "#9ed0cf",
+        "on-surface-variant": "#404848",
+        "primary": "#002b2b",
+        "on-primary-fixed": "#002020",
+        "outline-variant": "#c0c8c7",
+        "outline": "#707978",
+        "on-secondary-fixed-variant": "#4b463f",
+        "on-secondary-container": "#69635c",
+        "surface-variant": "#e8e1dc",
+        "inverse-surface": "#33302d",
+        "surface-container-high": "#ede7e2",
+        "tertiary-container": "#701d12",
+        "surface": "#fff8f3",
+        "secondary": "#635d57",
+        "on-tertiary-fixed": "#400100",
+        "error-container": "#ffdad6",
+        "tertiary-fixed-dim": "#ffb4a7",
+        "secondary-fixed-dim": "#cec5bd",
+        "on-primary-fixed-variant": "#1b4e4e",
+        "primary-container": "#0a4242",
+        "surface-tint": "#366666"
+      },
+      "borderRadius": {
+        "DEFAULT": "0.125rem",
+        "lg": "0.25rem",
+        "xl": "0.5rem",
+        "full": "0.75rem"
+      },
+      "spacing": {
+        "margin-tablet": "2rem",
+        "space-md": "0.875rem",
+        "space-sm": "0.5rem",
+        "space-xl": "2.5rem",
+        "margin-desktop": "3rem",
+        "space-xs": "0.25rem",
+        "space-2xl": "4rem",
+        "gutter": "1.25rem",
+        "space-lg": "1.5rem",
+        "gutter-desktop": "1.75rem",
+        "margin": "1rem"
+      },
+      "fontFamily": {
+        "display-figure": ["Newsreader"],
+        "headline-lg": ["Newsreader"],
+        "headline-md": ["Newsreader"],
+        "label-caps": ["Inter"],
+        "display-figure-mobile": ["Newsreader"],
+        "data-metric": ["Inter"],
+        "body-lg": ["Newsreader"],
+        "body-md": ["Inter"],
+        "headline-sm": ["Newsreader"],
+        "headline-lg-mobile": ["Newsreader"],
+        "body-sm": ["Inter"],
+        "code-tabular": ["Inter"]
+      },
+      "fontSize": {
+        "display-figure": ["3.75rem", {"lineHeight": "1.05", "letterSpacing": "-0.025em", "fontWeight": "500"}],
+        "headline-lg": ["2.25rem", {"lineHeight": "1.2", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+        "headline-md": ["1.5rem", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+        "label-caps": ["0.6875rem", {"lineHeight": "1.3", "letterSpacing": "0.08em", "fontWeight": "600"}],
+        "display-figure-mobile": ["2.5rem", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+        "data-metric": ["1.25rem", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+        "body-lg": ["1.125rem", {"lineHeight": "1.75", "fontWeight": "400"}],
+        "body-md": ["0.9375rem", {"lineHeight": "1.6", "fontWeight": "400"}],
+        "headline-sm": ["1.125rem", {"lineHeight": "1.4", "fontWeight": "600"}],
+        "headline-lg-mobile": ["1.75rem", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+        "body-sm": ["0.8125rem", {"lineHeight": "1.5", "fontWeight": "400"}],
+        "code-tabular": ["0.8125rem", {"lineHeight": "1.4", "fontWeight": "500"}]
+      }
+    }
+  }
+}</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest border-b border-outline-variant/60 shadow-[0_1px_4px_rgba(0,0,0,0.03)]"><div class="bg-surface-container-low/80 border-b border-outline-variant/40 px-margin-desktop py-space-xs text-on-surface-variant hidden md:block"><div class="max-w-[1440px] mx-auto flex items-center justify-between font-label-caps text-label-caps uppercase tracking-wider"><div class="flex items-center gap-space-md"><span class="flex items-center gap-1.5 text-primary font-bold"><span class="inline-block w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>Live Registry Feed</span><span class="text-outline-variant">|</span><span>Q3 2024 DPWH, PhilGEPS &amp; COA Consolidated Records</span></div><div class="flex items-center gap-space-lg"><span class="font-code-tabular text-code-tabular normal-case text-on-surface">148,204 Projects Audited</span><span class="text-outline-variant">|</span><span class="text-on-surface-variant">Updated 4h ago</span></div></div></div><div class="h-16 max-w-[1440px] mx-auto px-margin-desktop flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm group" href="#"><img alt="Bantay Pondo Brand Emblem" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xi8vTqLq-v1Sk3ayJYzTjRJDlgGd2K7KYnmB6jToq_i0lGjgvt3OidTOx2hgDrPoxCNOuSBhp2J53R7jpu8Px6wZtmuIijkMt-gPaYWj2pcovySDQTAipIlV5fUikZqrbExLeHvhoBCUsjQdx9IlZneZ3N4p2xQCKH-PDlZH1M4fvKG6lZGvit8MxQ3fZCDqHJrZP4utp92VKk_w5DVP2ff9dSb4TjD2vN_E6fp6TmKws1WZry19WZ3kM"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight leading-none group-hover:text-primary-container transition-colors">Bantay Pondo</span><span class="font-label-caps text-[0.625rem] text-secondary tracking-wider uppercase mt-0.5">Infrastructure Ledger</span></div></a><div class="h-7 w-px bg-outline-variant/50 hidden xl:block"></div><nav class="hidden lg:flex items-center gap-space-lg font-body-sm text-body-sm" data-active-classes="text-primary font-bold border-b-2 border-primary"><a class="text-on-surface-variant hover:text-on-surface py- space-sm transition-colors" data-path="national-map-search" href="#">National Map &amp; Search</a><a aria-current="page" class="py-space-sm transition-colors text-primary font-bold border-b-2 border-primary" data-path="locality-dossiers" href="#">Locality Dossiers</a><a class="text-on-surface-variant hover:text-on-surface py-space-sm transition-colors" data-path="contractor-registry" href="#">Contractor Registry</a><a class="text-on-surface-variant hover:text-on-surface py-space-sm transition-colors" data-path="compare-localities" href="#">Compare Localities</a><a class="text-on-surface-variant hover:text-on-surface py-space-sm transition-colors" data-path="methodology-data" href="#">Methodology &amp; Data</a></nav></div><div class="flex items-center gap-space-md"><button class="hidden sm:flex items-center gap-space-sm px-space-md py-1.5 rounded bg-surface-container border border-outline-variant/80 text-on-surface-variant hover:text-on-surface hover:border-outline transition-colors" type="button"><span class="material-symbols-outlined text-[16px]">search</span><span class="font-body-sm text-body-sm font-label-caps uppercase text-[0.6875rem]">Registry Search</span><kbd class="font-code-tabular text-[0.625rem] bg-surface-container-lowest border border-outline-variant/80 px-1.5 py-0.5 rounded text-secondary font-bold ml-1">⌘K</kbd></button><a class="hidden md:inline-flex items-center gap-1.5 px-space-md py-1.5 rounded border border-outline-variant text-on-surface hover:bg-surface-container-low transition-colors font-label-caps text-label-caps uppercase tracking-wider" href="#"><span class="material-symbols-outlined text-[16px] text-primary">download</span>Audit CSV</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-surface"><div class="flex flex-col w-full">
+<section class="w-full bg-surface-container-low/60 border-b border-outline-variant/60">
+<div class="max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-margin-desktop py-space-md">
+<div class="flex flex-wrap items-center justify-between gap-space-sm font-label-caps text-label-caps uppercase tracking-wider text-secondary">
+<div class="flex items-center gap-space-sm flex-wrap">
+<a class="inline-flex items-center gap-1.5 text-primary hover:text-primary-container font-semibold transition-colors" href="#">
+<span class="material-symbols-outlined text-[15px]">arrow_back</span>
+            Back to Tuguegarao City Dossier
+          </a>
+<span class="text-outline-variant">/</span>
+<span class="font-code-tabular text-on-surface">Cagayan River Basin</span>
+<span class="text-outline-variant">/</span>
+<span class="font-code-tabular text-secondary">DPWH-RO2-23BC0042</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-tertiary/10 border border-tertiary/30 text-tertiary font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-ping"></span>
+            COA High-Risk Watchlist
+          </span>
+<span class="text-outline-variant">|</span>
+<span class="font-code-tabular text-on-surface-variant">SARO-BMB-A-23-0004118</span>
+</div>
+</div>
+<div class="mt-space-md grid grid-cols-1 xl:grid-cols-12 gap-space-md items-end">
+<div class="xl:col-span-9 space-y-space-xs">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="font-label-caps text-[0.625rem] px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-on-surface-variant font-bold uppercase tracking-widest">Infra ID: 23BC0042</span>
+<span class="font-label-caps text-[0.625rem] px-2 py-0.5 rounded bg-error-container border border-error/30 text-on-error-container font-bold uppercase tracking-widest">Negative Slippage: -38.4%</span>
+<span class="font-code-tabular text-xs text-secondary">Coordinates: 17.6184° N, 121.6912° E</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg lg:text-[2.35rem] font-bold text-on-surface tracking-tight leading-tight">
+            Construction of Flood Mitigation Structure along Cagayan River, Brgy. Buntun (Phase III)
+          </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-5xl">
+<strong class="text-on-surface font-semibold">Contract Authority:</strong> DPWH Regional Office II (Tuguegarao City) • 
+            <strong class="text-on-surface font-semibold">Category:</strong> Flood Control &amp; Riverbank Drainage Works • 
+            <strong class="text-on-surface font-semibold">Funding Source:</strong> General Appropriations Act (GAA) FY 2023 • 
+            <strong class="text-on-surface font-semibold">Implementing Sub-District:</strong> Cagayan 3rd District Engineering Office
+          </p>
+</div>
+<div class="xl:col-span-3 flex xl:flex-col items-end xl:items-end justify-between xl:justify-end gap-2 pb-1">
+<div class="flex items-center gap-2">
+<button class="inline-flex items-center gap-1.5 px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded hover:bg-surface-container text-on-surface font-label-caps text-label-caps uppercase transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">history_edu</span>
+              COA Findings (PDF)
+            </button>
+<button class="inline-flex items-center gap-1.5 px-3 py-2 bg-primary text-on-primary rounded hover:bg-primary-container font-label-caps text-label-caps uppercase transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">share</span>
+              Export Dossier
+            </button>
+</div>
+<span class="font-code-tabular text-[0.7rem] text-secondary">Verified against PhilGEPS release 2024-Q3</span>
+</div>
+</div>
+</div>
+</section>
+<div class="max-w-[1360px] w-full mx-auto px-4 sm:px-8 lg:px-margin-desktop py-space-xl space-y-space-xl">
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<div class="bg-surface-container-lowest border border-outline-variant/80 rounded p-space-lg flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-label-caps uppercase text-secondary tracking-wider block mb-1">Contract Award Total</span>
+<div class="font-display-figure text-[2.45rem] leading-tight text-on-surface font-medium">₱142.50<span class="text-headline-md font-headline-md font-normal text-secondary">M</span></div>
+</div>
+<div class="pt-space-md mt-space-md border-t border-outline-variant/50 flex items-center justify-between text-body-sm font-body-sm text-secondary">
+<span>Approved Budget (ABC)</span>
+<span class="font-code-tabular text-on-surface font-medium">₱148.00M (-3.7%)</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant/80 rounded p-space-lg flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-caps text-label-caps uppercase text-secondary tracking-wider">Financial Disbursement</span>
+<span class="font-code-tabular text-xs font-bold text-on-surface">50.0% Paid</span>
+</div>
+<div class="font-display-figure text-[2.45rem] leading-tight text-on-surface font-medium">₱71.25<span class="text-headline-md font-headline-md font-normal text-secondary">M</span></div>
+</div>
+<div class="pt-space-md mt-space-md border-t border-outline-variant/50">
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 50.0%;"></div>
+</div>
+<div class="flex items-center justify-between mt-1 text-[0.75rem] font-code-tabular text-secondary">
+<span>Cumulative Claims: 3</span>
+<span>Unliquidated: ₱21.37M</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant/80 rounded p-space-lg flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-caps text-label-caps uppercase text-secondary tracking-wider">Physical Verified Progress</span>
+<span class="font-code-tabular text-xs font-bold text-tertiary">Critical Delay</span>
+</div>
+<div class="font-display-figure text-[2.45rem] leading-tight text-tertiary font-medium">42.6<span class="text-headline-md font-headline-md font-normal text-secondary">%</span></div>
+</div>
+<div class="pt-space-md mt-space-md border-t border-outline-variant/50">
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 42.6%;"></div>
+</div>
+<div class="flex items-center justify-between mt-1 text-[0.75rem] font-code-tabular text-tertiary font-medium">
+<span>Target as of Jun 2024: 81.0%</span>
+<span>Slippage: -38.4%</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant/80 rounded p-space-lg flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 right-0 w-2 h-full bg-tertiary-container"></div>
+<div>
+<span class="font-label-caps text-label-caps uppercase text-tertiary font-bold tracking-wider block mb-1">Fiscal Gap Alert</span>
+<div class="font-display-figure text-[2.45rem] leading-tight text-tertiary font-medium">+₱10.53<span class="text-headline-md font-headline-md font-normal text-tertiary/70">M</span></div>
+</div>
+<div class="pt-space-md mt-space-md border-t border-outline-variant/50 text-body-sm font-body-sm">
+<p class="text-on-surface-variant leading-snug">
+            Cash disbursed exceeds verified structural in-place civil works by <span class="font-bold text-tertiary">7.4%</span>.
+          </p>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<div class="lg:col-span-7 xl:col-span-8 flex flex-col gap-space-lg">
+<div class="bg-surface-container-lowest border border-outline-variant/80 rounded overflow-hidden">
+<div class="bg-surface-container-low px-space-lg py-space-md border-b border-outline-variant/80 flex items-center justify-between flex-wrap gap-2">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">assignment</span>
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Procurement &amp; Execution Ledger</h2>
+</div>
+<span class="font-label-caps text-label-caps uppercase text-secondary">PhilGEPS Ref: #9821044</span>
+</div>
+<div class="p-space-lg space-y-space-md">
+<div class="p-space-md bg-tertiary/5 border-l-4 border-tertiary border border-outline-variant/40 rounded flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">warning</span>
+<span class="font-headline-sm text-sm font-bold text-tertiary uppercase tracking-tight">Financial Ahead of Physical Completion</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                  Disbursement stands at <strong class="text-on-surface">50.0% (₱71.25M)</strong>, while engineer-certified concrete civil works stand at only <strong class="text-on-surface">42.6%</strong>.
+                  Statutory variance limit: ±2.0%.
+                </p>
+</div>
+<div class="shrink-0 text-right">
+<span class="font-code-tabular text-sm font-bold text-tertiary bg-surface-container-lowest px-2 py-1 rounded border border-tertiary/40 block">
+                  ₱10,545,000 Unmatched
+                </span>
+<span class="text-[0.6875rem] text-secondary font-label-caps uppercase">Discrepancy</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full border-collapse font-body-sm text-body-sm">
+<tbody class="divide-y divide-outline-variant/50">
+<tr class="hover:bg-surface-container-low/40">
+<td class="py-space-md text-secondary font-medium w-1/3 pr-4">Contract Identification No.</td>
+<td class="py-space-md text-on-surface font-code-tabular font-semibold">DPWH-23-BC-0042-R2</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40">
+<td class="py-space-md text-secondary font-medium pr-4">Prime General Contractor</td>
+<td class="py-space-md text-on-surface">
+<div class="flex items-center justify-between flex-wrap gap-2">
+<span class="font-semibold text-primary hover:underline cursor-pointer">Alpha &amp; Omega General Contractor &amp; Development Corp.</span>
+<span class="font-label-caps text-[0.625rem] px-1.5 py-0.5 rounded bg-surface-container border border-outline-variant text-secondary">PCAB: AAA (Large B)</span>
+</div>
+<span class="font-code-tabular text-xs text-secondary block mt-0.5">TIN: 004-981-229-000 | Pasig City, Metro Manila</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40">
+<td class="py-space-md text-secondary font-medium pr-4">Procurement Mode</td>
+<td class="py-space-md text-on-surface">
+<span class="font-medium">Public Competitive Bidding (RA 9184)</span>
+<span class="text-secondary text-xs block">2 Bidders Evaluated; 1 Bidder Disqualified at Technical Envelope Opening</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40">
+<td class="py-space-md text-secondary font-medium pr-4">Approved Budget for Contract (ABC)</td>
+<td class="py-space-md text-on-surface font-code-tabular">₱148,000,000.00</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40">
+<td class="py-space-md text-secondary font-medium pr-4">Contract Award Value</td>
+<td class="py-space-md text-on-surface font-code-tabular font-semibold">
+                      ₱142,500,000.00 <span class="text-secondary font-normal text-xs ml-2">(3.71% below ABC)</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40">
+<td class="py-space-md text-secondary font-medium pr-4">Notice of Award (NOA)</td>
+<td class="py-space-md text-on-surface font-code-tabular">February 27, 2023</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40">
+<td class="py-space-md text-secondary font-medium pr-4">Notice to Proceed (NTP)</td>
+<td class="py-space-md text-on-surface font-code-tabular">March 14, 2023</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40">
+<td class="py-space-md text-secondary font-medium pr-4">Contract Duration (Original)</td>
+<td class="py-space-md text-on-surface font-code-tabular">307 Calendar Days (Target: January 15, 2024)</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40">
+<td class="py-space-md text-secondary font-medium pr-4">Approved Time Variations</td>
+<td class="py-space-md text-on-surface">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-code-tabular font-medium text-xs bg-surface-container px-1.5 py-0.5 rounded">TE #1: +90 Days</span>
+<span class="text-xs text-secondary">Weather disturbances / Typhoon Egay (Approved Oct 2023)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-code-tabular font-medium text-xs bg-surface-container px-1.5 py-0.5 rounded">TE #2: +138 Days</span>
+<span class="text-xs text-secondary">Alleged Right-of-Way obstruction (Approved Mar 2024)</span>
+</div>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40">
+<td class="py-space-md text-secondary font-medium pr-4">Revised Target Completion</td>
+<td class="py-space-md text-tertiary font-code-tabular font-bold">August 30, 2024 <span class="text-secondary font-normal text-xs">(Overdue / Incurring Liquidated Damages Assessment)</span></td>
+</tr>
+<tr class="hover:bg-surface-container-low/40">
+<td class="py-space-md text-secondary font-medium pr-4">Physical Accomplishment</td>
+<td class="py-space-md text-on-surface">
+<div class="flex items-center gap-3">
+<span class="font-code-tabular font-bold text-on-surface text-base">42.60%</span>
+<span class="font-label-caps text-label-caps text-tertiary bg-tertiary/10 border border-tertiary/30 px-2 py-0.5 rounded font-bold uppercase">
+                          Slippage -38.40%
+                        </span>
+</div>
+<span class="text-xs text-secondary block mt-1">DPWH Quality Assurance Unit (QAU) Inspection Report #QAU-RO2-2024-041</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40">
+<td class="py-space-md text-secondary font-medium pr-4">Liquidated Damages Potential</td>
+<td class="py-space-md text-on-surface font-code-tabular font-semibold">₱142,500.00 / day <span class="text-secondary font-normal text-xs">(1/10 of 1% of unperformed work)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pt-space-sm">
+<span class="font-label-caps text-label-caps uppercase text-secondary tracking-wider block mb-2">Cumulative Physical vs. Financial Timeline S-Curve</span>
+<div class="bg-surface-container-low p-4 rounded border border-outline-variant/60">
+<svg class="w-full h-36 overflow-visible" preserveaspectratio="none" viewbox="0 0 600 120">
+<line class="text-outline-variant/40" stroke="currentColor" stroke-dasharray="3 3" stroke-width="1" x1="40" x2="580" y1="20" y2="20"></line>
+<line class="text-outline-variant/40" stroke="currentColor" stroke-dasharray="3 3" stroke-width="1" x1="40" x2="580" y1="60" y2="60"></line>
+<line class="text-outline-variant/40" stroke="currentColor" stroke-width="1" x1="40" x2="580" y1="100" y2="100"></line>
+<text class="font-code-tabular text-[9px] fill-secondary text-right" text-anchor="end" x="30" y="24">100%</text>
+<text class="font-code-tabular text-[9px] fill-secondary text-right" text-anchor="end" x="30" y="64">50%</text>
+<text class="font-code-tabular text-[9px] fill-secondary text-right" text-anchor="end" x="30" y="104">0%</text>
+<!-- Target S-curve -->
+<path class="text-outline" d="M40 100 Q 200 95 310 60 T 580 20" fill="none" stroke="currentColor" stroke-dasharray="4 4" stroke-width="2"></path>
+<!-- Financial Disbursement Curve (Blue/Primary) -->
+<path class="text-primary" d="M40 100 C 130 98 220 85 360 60" fill="none" stroke="currentColor" stroke-width="2.5"></path>
+<circle class="fill-primary" cx="360" cy="60" r="4"></circle>
+<!-- Actual Physical Progress Curve (Red/Tertiary) -->
+<path class="text-tertiary" d="M40 100 C 140 100 240 92 360 72" fill="none" stroke="currentColor" stroke-width="2.5"></path>
+<circle class="fill-tertiary" cx="360" cy="72" r="4"></circle>
+<!-- Projection dotted red -->
+<path class="text-tertiary" d="M360 72 Q 440 68 520 55" fill="none" stroke="currentColor" stroke-dasharray="2 2" stroke-width="1.5"></path>
+<text class="font-code-tabular text-[9px] fill-primary font-bold" x="365" y="55">Disbursement: 50%</text>
+<text class="font-code-tabular text-[9px] fill-tertiary font-bold" x="365" y="80">Physical: 42.6%</text>
+<text class="font-code-tabular text-[9px] fill-secondary" x="470" y="28">Planned Schedule Target</text>
+</svg>
+<div class="flex items-center justify-between text-[0.7rem] font-code-tabular text-secondary mt-2 px-6">
+<span>Mar 2023 (NTP)</span>
+<span>Jul 2023</span>
+<span>Nov 2023</span>
+<span class="text-on-surface font-bold">Jun 2024 (Current Audit)</span>
+<span>Aug 2024 (TE #2)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant/80 rounded p-space-lg space-y-space-md">
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-tertiary text-[20px]">flag</span>
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Auditor-General &amp; Civil Watchdog Red Flags</h2>
+</div>
+<span class="font-label-caps text-label-caps uppercase text-error font-bold tracking-wider">3 Active Violations Noted</span>
+</div>
+<div class="grid grid-cols-1 gap-space-md">
+<div class="bg-surface-container-low border border-tertiary/30 rounded p-space-md relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-tertiary"></div>
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2 pl-2">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-[0.65rem] px-2 py-0.5 rounded bg-tertiary text-on-tertiary font-bold tracking-wider uppercase">Red Flag #1</span>
+<span class="font-code-tabular text-xs text-tertiary font-bold uppercase">Severe Negative Slippage (-38.4%)</span>
+</div>
+<h3 class="font-headline-sm text-base font-bold text-on-surface mt-1">Exceeds Mandatory Termination Threshold under RA 9184</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                    Pursuant to Annex I (Guidelines on Contract Termination) of the 2016 Revised IRR of RA 9184, negative slippage exceeding <strong class="text-on-surface">15.0%</strong> triggers immediate default proceedings, contract forfeiture, and blacklisting recommendations. While DPWH RO2 approved Time Extension #2 citing unresolved right-of-way (ROW) easement, Tuguegarao City Assessor records confirm the Buntun coastal easement had already been acquired and cleared in August 2022.
+                  </p>
+</div>
+<span class="font-code-tabular text-xs text-secondary shrink-0">COA AAR 2023 Sec. 14.2</span>
+</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded p-space-md relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-[#D89B4A]"></div>
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2 pl-2">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-[0.65rem] px-2 py-0.5 rounded bg-[#FDF6EC] border border-[#D89B4A] text-[#7A4C10] font-bold tracking-wider uppercase">Orange Flag #2</span>
+<span class="font-code-tabular text-xs text-[#7A4C10] font-bold uppercase">Advance Mobilization / Billing Disparity</span>
+</div>
+<h3 class="font-headline-sm text-base font-bold text-on-surface mt-1">₱71.25M Disbursed vs 42.6% Verified Revetment Footprint</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                    Contractor was granted Progress Billing #2 amounting to ₱28.5M on November 14, 2023, despite district site inspector notes indicating zero progress on the southern 400-meter reinforced concrete sheet pile drive. This represents <strong class="text-on-surface">₱10,545,000.00</strong> in premature public fund disbursements ahead of validated structural installation.
+                  </p>
+</div>
+<span class="font-code-tabular text-xs text-secondary shrink-0">Voucher 2023-11-8891</span>
+</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded p-space-md relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-outline"></div>
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2 pl-2">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-[0.65rem] px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-on-surface-variant font-bold tracking-wider uppercase">Yellow Flag #3</span>
+<span class="font-code-tabular text-xs text-secondary font-bold uppercase">Collusive Single-Bidder Pattern</span>
+</div>
+<h3 class="font-headline-sm text-base font-bold text-on-surface mt-1">Disqualification of Sole Competitor at Eligibility Stage</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                    The Bids and Awards Committee (BAC) evaluated only two participants. Competitor Northern Builders Inc. was rejected for lacking laboratory calibration certificates for compressive strength testing rigs, converting the bid into a de facto Single Calculated Responsive Bid (SCRB) with a marginal 3.7% reduction from ABC.
+                  </p>
+</div>
+<span class="font-code-tabular text-xs text-secondary shrink-0">BAC Res. 2023-018</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-5 xl:col-span-4 flex flex-col gap-space-lg">
+<div class="bg-surface-container-lowest border border-outline-variant/80 rounded overflow-hidden">
+<div class="bg-surface-container-low px-space-md py-space-sm border-b border-outline-variant/80 flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">satellite_alt</span>
+<span class="font-headline-sm text-sm font-bold text-on-surface">Geospatial Footprint &amp; Verification</span>
+</div>
+<span class="font-code-tabular text-[0.7rem] text-secondary">Cagayan River Kilometric 48</span>
+</div>
+<div class="relative w-full h-64 bg-surface-container overflow-hidden" data-alt="High-resolution aerial satellite surveillance map view of the Cagayan River bend near Buntun Bridge in Tuguegarao City. The murky brown river curves sharply past agricultural floodplains. Overlaid are sharp red and amber municipal hazard lines, a prominent 1.2-kilometer highlighted revetment construction sector along the water embankment, and geotagged coordinate crosshairs in clean technical cartographic style." data-location="Buntun Bridge, Tuguegarao City, Cagayan, Philippines" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC4aHyoGOdO1X0rAP1EgohyDqUwEVQPc6J-zE2ajvPOP6Hef9XhI8I1wdE34QHoBOTPSXsxAjfdcu8gh5ZbCz3nzd9P17RGhLRdTaKhlrH4pOYp3Ezv7W5AmWncwcSYjaHvImkML-yQYOMFlfmloSmgY36ba9eAwV-PBU-O7Qas2aRtUtaiRX0RA5frxTuVTIcwymhCI7ZeGItTu_yfMzLmJk5BS8bnOyI6vm6pRpNQl0UJxLuY3Zb_')">
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-black/20 pointer-events-none"></div>
+<div class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-sm border border-outline-variant/80 px-2 py-1 rounded text-left shadow-sm">
+<div class="font-code-tabular text-[0.6875rem] font-bold text-on-surface">17.6184° N, 121.6912° E</div>
+<div class="font-label-caps text-[0.6rem] text-secondary uppercase">Datum: WGS 84 / PRS92</div>
+</div>
+<div class="absolute top-3 right-3 bg-tertiary text-on-tertiary px-2 py-0.5 rounded font-label-caps text-[0.625rem] font-bold uppercase tracking-wider">
+              100-Yr Floodplain
+            </div>
+<div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-on-primary">
+<div class="space-y-0.5">
+<div class="text-xs font-bold font-headline-sm text-surface-container-lowest">Revetment Footprint: 1,200 Linear Meters</div>
+<div class="text-[0.6875rem] text-primary-fixed opacity-90">Brgy. Buntun Dike Revetment Alignment</div>
+</div>
+<a class="p-1.5 bg-surface-container-lowest text-primary rounded hover:bg-surface transition-colors" href="#" title="Expand Full Cartography">
+<span class="material-symbols-outlined text-[16px] block">open_in_new</span>
+</a>
+</div>
+</div>
+<div class="p-space-md border-b border-outline-variant/50 space-y-space-xs">
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-secondary font-medium">UP NOAH Hazard Model:</span>
+<span class="font-code-tabular text-tertiary font-bold">High Flood Risk (&gt; 1.5m Depth)</span>
+</div>
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-secondary font-medium">Historical Breaches:</span>
+<span class="font-code-tabular text-on-surface">Typhoon Ulysses (2020), Vamco (2020)</span>
+</div>
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-secondary font-medium">Downstream Population at Risk:</span>
+<span class="font-code-tabular text-on-surface font-semibold">14,280 Residents (Brgy. Buntun)</span>
+</div>
+</div>
+<div class="p-space-md bg-surface-container-low/40 space-y-space-sm">
+<span class="font-label-caps text-[0.6875rem] text-secondary font-bold uppercase tracking-wider block">Drone Field Verification Registry</span>
+<div class="border border-outline-variant rounded bg-surface-container-lowest p-2.5 flex items-start gap-3">
+<div class="w-16 h-16 bg-surface-container rounded shrink-0 overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Close-up forensic audit drone surveillance photo of an uncompleted reinforced concrete sheet pile flood wall along a muddy tropical riverbank. Two rusty backhoes and a crane sit idle in muddy terrain without active personnel under overcast rainy skies." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCf3COeTSZWyEsLMnJb2wBkNnnN596RDNYXTU31uJzL1kFCXzvw_gpd7mhO-EAr8YzN5YtAeDWjR35JEN2xvPzL7cCNf4Vgn8e-XbMVutGk19FuTgPYqeTQzY29AVV85a17MJqzezyrWkFLhd-VhMG8VtIGAhq6GgVGmJsjgytgaGUuAJ2LCWQ0Giyl-mtqyBUB06_m7tnV4dAZX3yo14BMZgDv4o24ByspDpBpaFjsImxPnS8yAgwR"/>
+</div>
+<div class="min-w-0 flex-1 space-y-0.5">
+<div class="flex items-center justify-between">
+<span class="font-code-tabular text-[0.6875rem] text-tertiary font-bold uppercase">Audit Flight #4</span>
+<span class="font-code-tabular text-[0.6875rem] text-secondary">12 Jun 2024</span>
+</div>
+<p class="text-[0.75rem] font-body-sm text-on-surface line-clamp-2 leading-tight">
+                  Incomplete sheet piling along Sector 3; idle heavy equipment observed with no active backfilling.
+                </p>
+<a class="inline-block text-[0.6875rem] font-label-caps uppercase text-primary font-bold hover:underline" href="#">
+                  View 14 High-Res Frames →
+                </a>
+</div>
+</div>
+<div class="border border-outline-variant rounded bg-surface-container-lowest p-2.5 flex items-start gap-3">
+<div class="w-16 h-16 bg-surface-container rounded shrink-0 overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Civil engineering technical drone view documenting collapsed earthworks embankment and washouts after seasonal monsoon water surges along the unfinished Cagayan River dike construction sector." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3f1WoEJAuwc_j7hAMGe6xqqRQarXKTTuGa7hqcPk6-JEp82ntIF96KBbFCquvA2gZcVBBPb7z6yCZhGAsqiMMcOHM9fKQazsRyYolbvUZZep8enOJCTseg6RB9c2uCv_tEH3XO-dLUs_zmO4kqnZfAVCsdG2r3wudZfQ24d2viw23XMxasUw139qy-3s3dlD9fPsMoyuoa27gpalehHkbZGtSk78q9i7YuiAoGR_izMXgn_pIFjFw"/>
+</div>
+<div class="min-w-0 flex-1 space-y-0.5">
+<div class="flex items-center justify-between">
+<span class="font-code-tabular text-[0.6875rem] text-secondary font-bold uppercase">Audit Flight #3</span>
+<span class="font-code-tabular text-[0.6875rem] text-secondary">08 Feb 2024</span>
+</div>
+<p class="text-[0.75rem] font-body-sm text-on-surface line-clamp-2 leading-tight">
+                  Scouring on embankment base observed following high water crest. Gabion mattresses missing on 120m stretch.
+                </p>
+<a class="inline-block text-[0.6875rem] font-label-caps uppercase text-primary font-bold hover:underline" href="#">
+                  View 9 High-Res Frames →
+                </a>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant/80 rounded p-space-md space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-secondary tracking-wider font-bold">Key Project Personnel</span>
+<span class="font-code-tabular text-xs text-secondary">DPWH Org Chart RO-2</span>
+</div>
+<div class="space-y-2 text-body-sm">
+<div class="p-2 rounded bg-surface-container-low flex items-center justify-between">
+<div>
+<div class="font-semibold text-on-surface">Engr. Mathias Dela Cruz</div>
+<div class="text-xs text-secondary">DPWH Project Engineer / Quality Certifier</div>
+</div>
+<span class="font-label-caps text-[0.625rem] text-primary border border-primary/40 px-1.5 py-0.5 rounded">Signatory</span>
+</div>
+<div class="p-2 rounded bg-surface-container-low flex items-center justify-between">
+<div>
+<div class="font-semibold text-on-surface">Engr. Ronaldo S. Pua</div>
+<div class="text-xs text-secondary">District Engineer, Cagayan 3rd DEO</div>
+</div>
+<span class="font-label-caps text-[0.625rem] text-secondary border border-outline-variant px-1.5 py-0.5 rounded">Approving</span>
+</div>
+<div class="p-2 rounded bg-surface-container-low flex items-center justify-between">
+<div>
+<div class="font-semibold text-on-surface">Ramoncito V. Tan</div>
+<div class="text-xs text-secondary">Authorized Managing Officer, Alpha &amp; Omega</div>
+</div>
+<span class="font-label-caps text-[0.625rem] text-tertiary border border-tertiary/40 px-1.5 py-0.5 rounded">Contractor</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section class="bg-surface-container-lowest border border-outline-variant/80 rounded overflow-hidden">
+<div class="bg-surface-container-low px-space-lg py-space-md border-b border-outline-variant/80 flex items-center justify-between flex-wrap gap-4">
+<div>
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">account_tree</span>
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Related River Basin Procurements by Same Contractor</h2>
+</div>
+<p class="font-body-sm text-body-sm text-secondary mt-0.5">
+            Cross-referenced PhilGEPS awards to <strong class="text-on-surface">Alpha &amp; Omega General Contractor &amp; Development Corp.</strong> within the Cagayan River System (2021–2024).
+          </p>
+</div>
+<div class="text-right">
+<span class="font-label-caps text-label-caps uppercase text-secondary block">Cumulative 3rd District Value</span>
+<span class="font-display-figure text-2xl font-bold text-primary font-headline-sm">₱491,500,000.00</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full border-collapse text-body-sm font-body-sm">
+<thead>
+<tr class="bg-surface-container-low border-b border-on-surface text-secondary font-label-caps text-[0.6875rem] uppercase tracking-wider text-left">
+<th class="py-space-md px-space-lg">Contract ID &amp; Scope</th>
+<th class="py-space-md px-space-md">Locality</th>
+<th class="py-space-md px-space-md">Fiscal Year</th>
+<th class="py-space-md px-space-md text-right">Award Amount</th>
+<th class="py-space-md px-space-md text-right">Progress</th>
+<th class="py-space-md px-space-md text-center">Status / Anomaly</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/60 font-body-sm">
+<tr class="hover:bg-surface-container-low/50">
+<td class="py-space-md px-space-lg">
+<div class="font-semibold text-primary hover:underline cursor-pointer">Construction of Revetment Wall along Pinacanauan River</div>
+<div class="font-code-tabular text-xs text-secondary">DPWH-RO2-22BC0019 • PhilGEPS #8812903</div>
+</td>
+<td class="py-space-md px-space-md text-on-surface">Tuguegarao City</td>
+<td class="py-space-md px-space-md font-code-tabular text-secondary">GAA FY 2022</td>
+<td class="py-space-md px-space-md font-code-tabular text-right font-medium text-on-surface">₱92,000,000.00</td>
+<td class="py-space-md px-space-md font-code-tabular text-right font-semibold text-on-surface">100.0%</td>
+<td class="py-space-md px-space-md text-center">
+<span class="font-label-caps text-[0.625rem] px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-secondary uppercase font-bold">
+                  Completed (Warranty Expired)
+                </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50">
+<td class="py-space-md px-space-lg">
+<div class="font-semibold text-primary hover:underline cursor-pointer">Solana Flood Control Dyke Protection Structure (Phase II)</div>
+<div class="font-code-tabular text-xs text-secondary">DPWH-RO2-23BC0081 • PhilGEPS #9940112</div>
+</td>
+<td class="py-space-md px-space-md text-on-surface">Solana, Cagayan</td>
+<td class="py-space-md px-space-md font-code-tabular text-secondary">GAA FY 2023</td>
+<td class="py-space-md px-space-md font-code-tabular text-right font-medium text-on-surface">₱115,000,000.00</td>
+<td class="py-space-md px-space-md font-code-tabular text-right font-semibold text-tertiary">58.2%</td>
+<td class="py-space-md px-space-md text-center">
+<span class="font-label-caps text-[0.625rem] px-2 py-0.5 rounded bg-tertiary/10 border border-tertiary/30 text-tertiary uppercase font-bold">
+                  Delayed (-22.1% Slippage)
+                </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50">
+<td class="py-space-md px-space-lg">
+<div class="font-semibold text-primary hover:underline cursor-pointer">Amulung Riverbank Dike Revetment &amp; Spur Dikes</div>
+<div class="font-code-tabular text-xs text-secondary">DPWH-RO2-21BC0065 • PhilGEPS #7410291</div>
+</td>
+<td class="py-space-md px-space-md text-on-surface">Amulung, Cagayan</td>
+<td class="py-space-md px-space-md font-code-tabular text-secondary">GAA FY 2021</td>
+<td class="py-space-md px-space-md font-code-tabular text-right font-medium text-on-surface">₱78,000,000.00</td>
+<td class="py-space-md px-space-md font-code-tabular text-right font-semibold text-on-surface">100.0%</td>
+<td class="py-space-md px-space-md text-center">
+<span class="font-label-caps text-[0.625rem] px-2 py-0.5 rounded bg-[#FAF5EE] border border-[#E8D5B7] text-[#68625B] uppercase font-bold">
+                  COA AOM Issued (Scour Failure)
+                </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50">
+<td class="py-space-md px-space-lg">
+<div class="font-semibold text-primary hover:underline cursor-pointer">Iguig Riverbank Protection and Gabion Mattresses</div>
+<div class="font-code-tabular text-xs text-secondary">DPWH-RO2-24BC0012 • PhilGEPS #10492102</div>
+</td>
+<td class="py-space-md px-space-md text-on-surface">Iguig, Cagayan</td>
+<td class="py-space-md px-space-md font-code-tabular text-secondary">GAA FY 2024</td>
+<td class="py-space-md px-space-md font-code-tabular text-right font-medium text-on-surface">₱64,000,000.00</td>
+<td class="py-space-md px-space-md font-code-tabular text-right font-semibold text-on-surface">14.0%</td>
+<td class="py-space-md px-space-md text-center">
+<span class="font-label-caps text-[0.625rem] px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-on-surface-variant uppercase font-bold">
+                  Ongoing Mobilization
+                </span>
+</td>
+</tr>
+<tr class="bg-surface-container-low/80 font-semibold text-on-surface">
+<td class="py-space-md px-space-lg text-right font-label-caps uppercase text-secondary" colspan="3">
+                Cumulative Concentration Index (4 Contracts in Cagayan River Corridor):
+              </td>
+<td class="py-space-md px-space-md font-code-tabular text-right text-base text-primary font-bold">
+                ₱349,000,000.00
+              </td>
+<td class="py-space-md px-space-md text-xs text-secondary" colspan="2">
+                (Excluding current ₱142.5M Buntun contract)
+              </td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-space-lg py-space-md bg-surface-container-low/40 border-t border-outline-variant/60 flex items-center justify-between flex-wrap gap-4">
+<div class="flex items-center gap-2 text-xs text-secondary">
+<span class="material-symbols-outlined text-[16px] text-primary">verified_user</span>
+<span>Contractor holds 61.4% of all flood mitigation expenditures awarded in Cagayan 3rd DEO between 2021–2024.</span>
+</div>
+<a class="inline-flex items-center gap-1.5 text-xs font-label-caps uppercase tracking-wider text-primary font-bold hover:text-primary-container transition-colors" href="#">
+          View Full Contractor Dossier
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</section>
+<div class="p-space-lg bg-surface-container-low border border-outline-variant/70 rounded flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">policy</span>
+<span class="font-headline-sm text-base font-bold text-on-surface">Submit Citizen Inspection / Geotagged Field Evidence</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-3xl">
+          Are you a resident of Barangay Buntun or a field surveyor with recent drone telemetry or photographs of this project site? Bantay Pondo accepts cryptographically verified open-source contributions.
+        </p>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded font-label-caps text-label-caps uppercase text-on-surface hover:bg-surface-container transition-colors" type="button">
+          Request FOI Voucher Copy
+        </button>
+<button class="px-4 py-2 bg-primary text-on-primary rounded font-label-caps text-label-caps uppercase font-semibold hover:bg-primary-container transition-colors" type="button">
+          Upload Geotagged Photo
+        </button>
+</div>
+</div>
+</div>
+</div></main><footer class="w-full bg-surface-container-low border-t border-outline-variant/70"><div class="max-w-[1440px] mx-auto px-margin-desktop py-space-2xl"><div class="grid grid-cols-1 md:grid-cols-12 gap-space-xl border-b border-outline-variant/50 pb-space-2xl"><div class="md:col-span-5 flex flex-col gap-space-md"><div class="flex items-center gap-space-sm"><img alt="Bantay Pondo Brand Emblem" class="h-7 w-auto object-contain grayscale opacity-85" src="https://lh3.googleusercontent.com/aida/AEtjO1Xi8vTqLq-v1Sk3ayJYzTjRJDlgGd2K7KYnmB6jToq_i0lGjgvt3OidTOx2hgDrPoxCNOuSBhp2J53R7jpu8Px6wZtmuIijkMt-gPaYWj2pcovySDQTAipIlV5fUikZqrbExLeHvhoBCUsjQdx9IlZneZ3N4p2xQCKH-PDlZH1M4fvKG6lZGvit8MxQ3fZCDqHJrZP4utp92VKk_w5DVP2ff9dSb4TjD2vN_E6fp6TmKws1WZry19WZ3kM"/><span class="font-headline-sm text-headline-sm text-primary font-bold">Bantay Pondo</span></div><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">An independent public-interest civic data project tracking Philippine government infrastructure allocations, contractor accountability, and hazard-zone public spending fidelity.</p><div class="p-space-md rounded bg-surface-container-lowest border border-outline-variant/80 font-body-sm text-body-sm text-on-surface-variant"><strong class="text-on-surface font-semibold block mb-1 font-label-caps text-label-caps uppercase">Editorial Notice &amp; Scope</strong>Bantay Pondo is an independent public interest data repository. Absence of recorded project spend in high-risk zones indicates potential audit blind spots or reporting delays, not absence of vulnerability.</div></div><div class="md:col-span-3 flex flex-col gap-space-sm"><span class="font-label-caps text-label-caps uppercase text-secondary font-bold tracking-wider">Data Sources &amp; Ingestion</span><ul class="space-y-2 font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors underline decoration-outline-variant/60 underline-offset-4" href="#">DPWH Transparency Portal</a></li><li><a class="hover:text-primary transition-colors underline decoration-outline-variant/60 underline-offset-4" href="#">PhilGEPS Contract Registers</a></li><li><a class="hover:text-primary transition-colors underline decoration-outline-variant/60 underline-offset-4" href="#">COA Annual Audit Reports (AAR)</a></li><li><a class="hover:text-primary transition-colors underline decoration-outline-variant/60 underline-offset-4" href="#">NOAH / PAGASA / MGB Hazard Maps</a></li><li><a class="hover:text-primary transition-colors underline decoration-outline-variant/60 underline-offset-4" href="#">DBM National Expenditure Program</a></li></ul></div><div class="md:col-span-2 flex flex-col gap-space-sm"><span class="font-label-caps text-label-caps uppercase text-secondary font-bold tracking-wider">Investigations</span><ul class="space-y-2 font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" href="#">Flood Control Audits</a></li><li><a class="hover:text-primary transition-colors" href="#">Barangay-Level Disparities</a></li><li><a class="hover:text-primary transition-colors" href="#">Ghost Projects Database</a></li><li><a class="hover:text-primary transition-colors" href="#">Top 100 Contractors</a></li><li><a class="hover:text-primary transition-colors" href="#">Red-Flag Risk Models</a></li></ul></div><div class="md:col-span-2 flex flex-col gap-space-sm"><span class="font-label-caps text-label-caps uppercase text-secondary font-bold tracking-wider">Civic Access</span><ul class="space-y-2 font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" href="#">Freedom of Information (FOI) API</a></li><li><a class="hover:text-primary transition-colors" href="#">Open Data Philippines Export</a></li><li><a class="hover:text-primary transition-colors" href="#">Research Methodology</a></li><li><a class="hover:text-primary transition-colors" href="#">GitHub Repository</a></li><li><a class="hover:text-primary transition-colors" href="#">Whistleblower Channel</a></li></ul></div></div><div class="pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm text-secondary"><p class="font-code-tabular text-code-tabular text-secondary">© 2024 Bantay Pondo Initiative. Released under Creative Commons Attribution 4.0 International (CC BY 4.0).</p><div class="flex items-center gap-space-lg font-label-caps text-label-caps uppercase tracking-wider"><a class="hover:text-on-surface transition-colors" href="#">Privacy &amp; Terms</a><a class="hover:text-on-surface transition-colors" href="#">Audit Log</a><a class="hover:text-on-surface transition-colors" href="#">Contact Newsroom</a></div></div></div></footer></body></html>

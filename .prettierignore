@@ -1,0 +1,11 @@
+node_modules
+dist
+.venv
+data
+stitch
+design-reference
+api
+pipeline
+db
+infra
+tests

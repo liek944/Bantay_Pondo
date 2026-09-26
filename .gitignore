@@ -48,3 +48,7 @@ data/raw/
 # Docker volumes / temp data
 *.sqlite
 *.log
+
+# Frontend & Node
+node_modules/
+.eslintcache
